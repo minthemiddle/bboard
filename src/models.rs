@@ -1,0 +1,223 @@
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Affordance {
+    pub id: Uuid,
+    pub name: String,
+    pub connects_to: Option<Uuid>, // Place ID
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Place {
+    pub id: Uuid,
+    pub name: String,
+    pub group: Option<String>,
+    pub affordances: Vec<Affordance>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Breadboard {
+    pub name: String,
+    pub created: String,
+    pub places: Vec<Place>,
+}
+
+impl Breadboard {
+    pub fn new(name: String) -> Self {
+        Self {
+            name,
+            created: chrono::Utc::now().to_rfc3339(),
+            places: Vec::new(),
+        }
+    }
+
+    pub fn add_place(&mut self, place: Place) {
+        self.places.push(place);
+    }
+
+    pub fn find_place(&self, id: &Uuid) -> Option<&Place> {
+        self.places.iter().find(|p| &p.id == id)
+    }
+
+    pub fn find_place_mut(&mut self, id: &Uuid) -> Option<&mut Place> {
+        self.places.iter_mut().find(|p| &p.id == id)
+    }
+
+    pub fn get_incoming_connections(&self, place_id: &Uuid) -> Vec<(&Place, &Affordance)> {
+        self.places
+            .iter()
+            .flat_map(|place| {
+                place.affordances.iter().filter_map(move |affordance| {
+                    affordance.connects_to.as_ref().and_then(|dest| {
+                        if dest == place_id {
+                            Some((place, affordance))
+                        } else {
+                            None
+                        }
+                    })
+                })
+            })
+            .collect()
+    }
+}
+
+impl Place {
+    pub fn new(name: String) -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name,
+            group: None,
+            affordances: Vec::new(),
+        }
+    }
+
+    #[allow(dead_code)]
+    pub fn with_group(mut self, group: String) -> Self {
+        self.group = Some(group);
+        self
+    }
+
+    pub fn add_affordance(&mut self, affordance: Affordance) {
+        self.affordances.push(affordance);
+    }
+}
+
+impl Affordance {
+    pub fn new(name: String) -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name,
+            connects_to: None,
+        }
+    }
+
+    #[allow(dead_code)]
+    pub fn with_connection(mut self, destination_place_id: Uuid) -> Self {
+        self.connects_to = Some(destination_place_id);
+        self
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_place_creation() {
+        let place = Place::new("Test Place".to_string());
+        assert_eq!(place.name, "Test Place");
+        assert_eq!(place.affordances.len(), 0);
+        assert!(place.group.is_none());
+    }
+
+    #[test]
+    fn test_place_with_group() {
+        let place = Place::new("Test Place".to_string()).with_group("web".to_string());
+        assert_eq!(place.group, Some("web".to_string()));
+    }
+
+    #[test]
+    fn test_affordance_creation() {
+        let affordance = Affordance::new("Click Me".to_string());
+        assert_eq!(affordance.name, "Click Me");
+        assert!(affordance.connects_to.is_none());
+    }
+
+    #[test]
+    fn test_affordance_with_connection() {
+        let dest_id = uuid::Uuid::new_v4();
+        let affordance = Affordance::new("Click Me".to_string()).with_connection(dest_id);
+        assert_eq!(affordance.connects_to, Some(dest_id));
+    }
+
+    #[test]
+    fn test_add_affordance_to_place() {
+        let mut place = Place::new("Test Place".to_string());
+        let affordance = Affordance::new("Action".to_string());
+        place.add_affordance(affordance);
+        assert_eq!(place.affordances.len(), 1);
+        assert_eq!(place.affordances[0].name, "Action");
+    }
+
+    #[test]
+    fn test_breadboard_creation() {
+        let breadboard = Breadboard::new("Test Board".to_string());
+        assert_eq!(breadboard.name, "Test Board");
+        assert_eq!(breadboard.places.len(), 0);
+    }
+
+    #[test]
+    fn test_breadboard_add_place() {
+        let mut breadboard = Breadboard::new("Test Board".to_string());
+        let place = Place::new("Test Place".to_string());
+        let place_id = place.id;
+        breadboard.add_place(place);
+        assert_eq!(breadboard.places.len(), 1);
+        assert_eq!(breadboard.places[0].id, place_id);
+    }
+
+    #[test]
+    fn test_breadboard_find_place() {
+        let mut breadboard = Breadboard::new("Test Board".to_string());
+        let place = Place::new("Test Place".to_string());
+        let place_id = place.id;
+        breadboard.add_place(place);
+
+        let found = breadboard.find_place(&place_id);
+        assert!(found.is_some());
+        assert_eq!(found.unwrap().name, "Test Place");
+
+        let not_found = breadboard.find_place(&uuid::Uuid::new_v4());
+        assert!(not_found.is_none());
+    }
+
+    #[test]
+    fn test_get_incoming_connections() {
+        let mut breadboard = Breadboard::new("Test Board".to_string());
+
+        let mut place1 = Place::new("Place 1".to_string());
+        let place2 = Place::new("Place 2".to_string());
+        let place2_id = place2.id;
+
+        let affordance = Affordance::new("Go to Place 2".to_string()).with_connection(place2_id);
+        place1.add_affordance(affordance);
+
+        breadboard.add_place(place1);
+        breadboard.add_place(place2);
+
+        let incoming = breadboard.get_incoming_connections(&place2_id);
+        assert_eq!(incoming.len(), 1);
+        assert_eq!(incoming[0].0.name, "Place 1");
+        assert_eq!(incoming[0].1.name, "Go to Place 2");
+    }
+
+    #[test]
+    fn test_serialization() {
+        let breadboard = Breadboard::new("Test Board".to_string());
+        let toml_str = toml::to_string_pretty(&breadboard).unwrap();
+        assert!(toml_str.contains("name = \"Test Board\""));
+    }
+
+    #[test]
+    fn test_deserialization() {
+        let toml_str = r#"
+name = "Test Board"
+created = "2025-01-15T10:00:00Z"
+
+[[places]]
+id = "550e8400-e29b-41d4-a716-446655440000"
+name = "Test Place"
+
+[[places.affordances]]
+id = "550e8400-e29b-41d4-a716-446655440001"
+name = "Test Action"
+"#;
+        let breadboard: Breadboard = toml::from_str(toml_str).unwrap();
+        assert_eq!(breadboard.name, "Test Board");
+        assert_eq!(breadboard.places.len(), 1);
+        assert_eq!(breadboard.places[0].name, "Test Place");
+        assert_eq!(breadboard.places[0].affordances.len(), 1);
+        assert_eq!(breadboard.places[0].affordances[0].name, "Test Action");
+    }
+}

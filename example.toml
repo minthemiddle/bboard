@@ -1,0 +1,39 @@
+name = "Autopay Feature Example"
+created = "2025-01-15T10:00:00Z"
+
+[[places]]
+name = "Invoice"
+
+[[places.affordances]]
+name = "Turn on Autopay"
+connects_to = "423f4a7b-8c9d-4e5f-6a7b-8c9d0e1f2a3b"
+
+[[places.affordances]]
+name = "View Details"
+
+[[places.affordances]]
+name = "Download PDF"
+
+[[places]]
+name = "Setup Autopay"
+
+[[places.affordances]]
+name = "CC Fields"
+connects_to = "6789abcd-ef12-3456-789a-bcdef0123456"
+
+[[places.affordances]]
+name = "ACH Option"
+connects_to = "6789abcd-ef12-3456-789a-bcdef0123456"
+
+[[places.affordances]]
+name = "Cancel"
+connects_to = "12345678-9abc-def0-1234-56789abcdef0"
+
+[[places]]
+name = "Confirm"
+
+[[places.affordances]]
+name = "Thank You Message"
+
+[[places.affordances]]
+name = "Print Receipt"

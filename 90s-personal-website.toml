@@ -9,27 +9,27 @@ name = "Under Construction Landing Page"
 [[places.affordances]]
 id = "b4ffc863-5ed9-458e-a8bc-ab22b96920ae"
 name = "Enter Website (if you dare!)"
-connects_to = "550e8400-e29b-41d4-a716-446655440001"
+connects_to = "412b3821-150e-49a4-b23e-105986a09a0f"
 
 [[places.affordances]]
 id = "50296a5a-04e2-4a93-9f36-69a4bdcffdcf"
 name = "Best viewed in Netscape Navigator 3.0"
-connects_to = "550e8400-e29b-41d4-a716-446655440002"
+connects_to = "412b3821-150e-49a4-b23e-105986a09a0f"
 
 [[places.affordances]]
 id = "98012679-596e-417d-9370-bd8c32f43bd3"
 name = "Sign my Guestbook!"
-connects_to = "550e8400-e29b-41d4-a716-446655440003"
+connects_to = "063333b7-f1e3-4d1d-84bc-ae5a567514cd"
 
 [[places.affordances]]
 id = "6337b68b-0bc1-4518-aade-932bd5682266"
 name = "MIDI Music Controls"
-connects_to = "550e8400-e29b-41d4-a716-446655440004"
+connects_to = "21db4985-abac-4b35-9b6d-f37fed8a58b1"
 
 [[places.affordances]]
 id = "84175f66-f77d-4c05-b513-234c5ee8692e"
 name = "View my Webring"
-connects_to = "550e8400-e29b-41d4-a716-446655440005"
+connects_to = "06d56f60-8eae-4a8a-a5c6-25a3e22d3baa"
 
 [[places.affordances]]
 id = "726e6f69-2a70-41a9-8b42-b11a4748dc9e"
@@ -43,17 +43,17 @@ name = "Browser Compatibility Warning"
 [[places.affordances]]
 id = "da861d00-eaa0-4e5e-9a9a-efc5842a8a22"
 name = "I'm using Netscape (Continue)"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 [[places.affordances]]
 id = "4eaaeaf1-5865-4094-88d6-d2fcfcffc58c"
 name = "I'm using IE (You're brave!)"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 [[places.affordances]]
 id = "cce581fe-50fc-4ed4-ae94-29a11b4b73ea"
 name = "Download Netscape Now!"
-connects_to = "550e8400-e29b-41d4-a716-446655440007"
+connects_to = "1fd1fefe-a59c-43a3-9290-a7717287ff0e"
 
 # The main experience
 [[places]]
@@ -63,32 +63,32 @@ name = "Personal Homepage with Animated GIFs"
 [[places.affordances]]
 id = "734daaf2-52b3-4c63-bea0-3726f54e83e1"
 name = "About Me (The Webmaster)"
-connects_to = "550e8400-e29b-41d4-a716-446655440008"
+connects_to = "39a09345-d6a8-4258-aeca-14f795eca3dd"
 
 [[places.affordances]]
 id = "ffe7c0ae-01ae-4f6f-8ed0-8c948121cf03"
 name = "My Cool Hobbies"
-connects_to = "550e8400-e29b-41d4-a716-446655440009"
+connects_to = "39eebfa8-c328-4cdd-a6e5-1c0c35a0b66c"
 
 [[places.affordances]]
 id = "cffce743-b99f-426e-9e44-36e1a8294c97"
 name = "Photo Gallery (Scanned Pics!)"
-connects_to = "550e8400-e29b-41d4-a716-44665544000a"
+connects_to = "cd51655f-2da1-4670-985e-2966f894aef8"
 
 [[places.affordances]]
 id = "2751219d-b8fa-4af7-9fe4-c5354d3db572"
 name = "My Friends' Links"
-connects_to = "550e8400-e29b-41d4-a716-44665544000b"
+connects_to = "945c175f-2b5b-495a-94b8-c18fedf1968b"
 
 [[places.affordances]]
 id = "4335f5bd-eae5-43bc-8680-5fe18cba1942"
 name = "Download Desktop Theme"
-connects_to = "550e8400-e29b-41d4-a716-44665544000c"
+connects_to = "3349e294-a47f-4ed8-aac3-6268a6308b78"
 
 [[places.affordances]]
 id = "b87f49a0-e835-412d-aed0-b9b13c4df5e7"
 name = "Chat Room (Java Applet)"
-connects_to = "550e8400-e29b-41d4-a716-44665544000d"
+connects_to = "9d9ed742-a726-4124-8554-db8bab45f2d8"
 
 [[places.affordances]]
 id = "0af4cf23-5c43-46f2-8e47-e124960cb899"
@@ -102,7 +102,7 @@ name = "About The Webmaster"
 [[places.affordances]]
 id = "8f18453d-6c58-4b3e-9e8f-3860649082ca"
 name = "My Computer Specs (Pentium II 266MHz!)"
-connects_to = "550e8400-e29b-41d4-a716-44665544000e"
+connects_to = "ddc1d553-9f41-48a1-a468-32b30d047432"
 
 [[places.affordances]]
 id = "040bc7c3-81e6-41df-afca-2d1500cdece7"
@@ -117,7 +117,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440010"
 [[places.affordances]]
 id = "50c218a5-17df-44d9-84c4-925b4a5af1b2"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 [[places.affordances]]
 id = "9eaf6c01-8850-48a8-96aa-cf35d9b332c3"
@@ -162,7 +162,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440017"
 [[places.affordances]]
 id = "949b62da-3569-4ea0-99d3-964f1f92c3f5"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Photo gallery
 [[places]]
@@ -197,7 +197,7 @@ connects_to = "550e8400-e29b-41d4-a716-44665544001c"
 [[places.affordances]]
 id = "7912ab1e-aa3a-40cb-829c-6eda2ad0bcb3"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Links page
 [[places]]
@@ -237,7 +237,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440022"
 [[places.affordances]]
 id = "24665565-b9c1-4f9b-ab02-b5a1a9527053"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Downloads section
 [[places]]
@@ -272,7 +272,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440027"
 [[places.affordances]]
 id = "231d45b4-b3ae-498e-9102-4d88a75f1e30"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Guestbook
 [[places]]
@@ -282,7 +282,7 @@ name = "Sign My Guestbook"
 [[places.affordances]]
 id = "50933215-5cfa-4a74-b479-fa178a18e986"
 name = "Leave a Message"
-connects_to = "550e8400-e29b-41d4-a716-446655440028"
+connects_to = "3925a6ca-f5ba-40fb-8862-9a819a66747d"
 
 [[places.affordances]]
 id = "48328c65-b865-4699-a4aa-ef23adfbb719"
@@ -297,7 +297,7 @@ connects_to = "550e8400-e29b-41d4-a716-44665544002a"
 [[places.affordances]]
 id = "53d9ea7c-9a1d-4efe-b41e-74105e9ed73a"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Chat room
 [[places]]
@@ -322,7 +322,7 @@ connects_to = "550e8400-e29b-41d4-a716-44665544002d"
 [[places.affordances]]
 id = "98f942d8-d192-4fb6-8173-93e98a3f75fd"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Webring
 [[places]]
@@ -357,7 +357,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440032"
 [[places.affordances]]
 id = "d50662be-0113-44d0-a4f8-0a185ab36c10"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Contact pages
 [[places]]
@@ -382,7 +382,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440035"
 [[places.affordances]]
 id = "6dcd918c-2cbf-43de-a006-3a99d9c5ffd2"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # MIDI music control
 [[places]]
@@ -407,7 +407,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440038"
 [[places.affordances]]
 id = "097af87c-9eee-40a3-8a13-c962e57a6fd1"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 # Placeholder places for external links
 [[places]]
@@ -422,7 +422,7 @@ connects_to = "550e8400-e29b-41d4-a716-446655440039"
 [[places.affordances]]
 id = "aa84b049-e368-4ecc-bc09-001535ed6a39"
 name = "Back to Homepage"
-connects_to = "550e8400-e29b-41d4-a716-446655440006"
+connects_to = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 
 [[places]]
 id = "ddc1d553-9f41-48a1-a468-32b30d047432"
@@ -461,7 +461,7 @@ connects_to = "550e8400-e29b-41d4-a716-44665544003f"
 [[places.affordances]]
 id = "39b7c83d-8b19-4656-9439-f181fa03b443"
 name = "Back to About Me"
-connects_to = "550e8400-e29b-41d4-a716-446655440008"
+connects_to = "39a09345-d6a8-4258-aeca-14f795eca3dd"
 
 [[places]]
 id = "3925a6ca-f5ba-40fb-8862-9a819a66747d"
@@ -500,4 +500,4 @@ connects_to = "550e8400-e29b-41d4-a716-446655440045"
 [[places.affordances]]
 id = "0e7340fb-c17e-4296-a45c-dae6e4b34d45"
 name = "Back to Guestbook"
-connects_to = "550e8400-e29b-41d4-a716-446655440003"
+connects_to = "063333b7-f1e3-4d1d-84bc-ae5a567514cd"

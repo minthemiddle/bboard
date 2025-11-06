@@ -3,18 +3,22 @@ use ratatui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style},
     text::{Line, Span},
-    widgets::{Block, Borders, List, ListItem, Paragraph},
+    widgets::{Block, Borders, List, ListItem, ListState, Paragraph},
     Frame,
 };
 
 use crate::app::{App, Selection};
 use crate::input::Mode;
 
-pub struct UI;
+pub struct UI {
+    list_state: ListState,
+}
 
 impl UI {
     pub fn new() -> Self {
-        Self
+        Self {
+            list_state: ListState::default(),
+        }
     }
 
     pub fn render<B: Backend>(&mut self, frame: &mut Frame, app: &mut App) {
@@ -33,38 +37,50 @@ impl UI {
     }
 
     fn render_status_bar<B: Backend>(&self, frame: &mut Frame, app: &App, area: Rect) {
-        let status_text = match app.state.mode {
-            Mode::Edit => {
-                vec![
-                    Span::styled("Editing: ", Style::default().fg(Color::Yellow)),
-                    Span::styled(&app.state.edit_buffer, Style::default().fg(Color::White)),
-                    Span::raw(" (Enter to save, Esc to cancel)"),
-                ]
-            }
-            Mode::Connect => {
-                vec![
-                    Span::styled("Connect to: ", Style::default().fg(Color::Cyan)),
-                    Span::styled(&app.state.connection_search_buffer, Style::default().fg(Color::White)),
-                    Span::raw(" (↑/↓ to select, Enter to connect, Esc to cancel)"),
-                ]
-            }
-            Mode::OpenFile => {
-                vec![
-                    Span::styled("Select file to open: ", Style::default().fg(Color::Magenta)),
-                    Span::raw(" (↑/↓ to select, Enter to open, Esc to cancel)"),
-                ]
-            }
-            _ => {
-                vec![
-                    Span::styled(
-                        format!("Board: {} ", app.breadboard.name),
-                        Style::default().fg(Color::Yellow),
-                    ),
-                    Span::styled(
-                        format!("Places: {} ", app.breadboard.places.len()),
-                        Style::default().fg(Color::Green),
-                    ),
-                ]
+        let status_text = if app.state.is_searching_places {
+            vec![
+                Span::styled("Jump to: ", Style::default().fg(Color::Green)),
+                Span::styled(&app.state.place_search_buffer, Style::default().fg(Color::White)),
+                Span::raw(" (type to filter, ↑/↓ to select, Enter to jump, Esc to cancel)"),
+            ]
+        } else {
+            match app.state.mode {
+                Mode::Edit => {
+                    vec![
+                        Span::styled("Editing: ", Style::default().fg(Color::Yellow)),
+                        Span::styled(&app.state.edit_buffer, Style::default().fg(Color::White)),
+                        Span::raw(" (Enter to save, Esc to cancel)"),
+                    ]
+                }
+                Mode::Connect => {
+                    vec![
+                        Span::styled("Connect to: ", Style::default().fg(Color::Cyan)),
+                        Span::styled(&app.state.connection_search_buffer, Style::default().fg(Color::White)),
+                        Span::raw(" (↑/↓ to select, Enter to connect, Esc to cancel)"),
+                    ]
+                }
+                Mode::OpenFile => {
+                    vec![
+                        Span::styled("Select file to open: ", Style::default().fg(Color::Magenta)),
+                        Span::raw(" (↑/↓ to select, Enter to open, Esc to cancel)"),
+                    ]
+                }
+                _ => {
+                    vec![
+                        Span::styled(
+                            format!("Board: {} ", app.breadboard.name),
+                            Style::default().fg(Color::Yellow),
+                        ),
+                        Span::styled(
+                            format!("Places: {} ", app.breadboard.places.len()),
+                            Style::default().fg(Color::Green),
+                        ),
+                        Span::styled(
+                            "(type to search) ",
+                            Style::default().fg(Color::Gray),
+                        ),
+                    ]
+                }
             }
         };
 
@@ -75,7 +91,7 @@ impl UI {
         frame.render_widget(status_bar, area);
     }
 
-    fn render_main_content<B: Backend>(&self, frame: &mut Frame, app: &mut App, area: Rect) {
+    fn render_main_content<B: Backend>(&mut self, frame: &mut Frame, app: &mut App, area: Rect) {
         if app.breadboard.places.is_empty() {
             self.render_empty_state::<B>(frame, area);
             return;
@@ -85,6 +101,8 @@ impl UI {
             self.render_connection_search::<B>(frame, app, area);
         } else if app.state.mode == Mode::OpenFile {
             self.render_file_selection::<B>(frame, app, area);
+        } else if app.state.is_searching_places {
+            self.render_place_search::<B>(frame, app, area);
         } else if app.state.collapsed {
             self.render_collapsed_view::<B>(frame, app, area);
         } else {
@@ -106,11 +124,21 @@ impl UI {
         frame.render_widget(paragraph, area);
     }
 
-    fn render_expanded_view<B: Backend>(&self, frame: &mut Frame, app: &App, area: Rect) {
+    fn render_expanded_view<B: Backend>(&mut self, frame: &mut Frame, app: &App, area: Rect) {
         let mut items = Vec::new();
 
+        // Precompute all incoming connections once for performance
+        let mut incoming_counts = std::collections::HashMap::new();
+        for place in &app.breadboard.places {
+            for affordance in &place.affordances {
+                if let Some(dest_id) = &affordance.connects_to {
+                    *incoming_counts.entry(*dest_id).or_insert(0) += 1;
+                }
+            }
+        }
+
         for (place_index, place) in app.breadboard.places.iter().enumerate() {
-            let incoming_connections = app.breadboard.get_incoming_connections(&place.id);
+            let incoming_count = incoming_counts.get(&place.id).copied().unwrap_or(0);
 
             // Place header with incoming connections indicator
             let place_style = if app.state.selection == Some(Selection::Place(place.id)) {
@@ -119,10 +147,10 @@ impl UI {
                 Style::default().fg(Color::Cyan)
             };
 
-            let place_header = if incoming_connections.is_empty() {
+            let place_header = if incoming_count == 0 {
                 format!("┌─ {}", place.name)
             } else {
-                format!("┌─ {} (← {} sources)", place.name, incoming_connections.len())
+                format!("┌─ {} (← {} sources)", place.name, incoming_count)
             };
 
             items.push(ListItem::new(Line::from(Span::styled(place_header, place_style))));
@@ -164,9 +192,15 @@ impl UI {
         }
 
         let list = List::new(items)
-            .block(Block::default().borders(Borders::ALL).title("Breadboard"));
+            .block(Block::default().borders(Borders::ALL).title("Breadboard"))
+            .highlight_style(Style::default());
 
-        frame.render_widget(list, area);
+        // Update list state for scrolling
+        if let Some(selected_index) = app.get_selected_item_index() {
+            self.list_state.select(Some(selected_index));
+        }
+
+        frame.render_stateful_widget(list, area, &mut self.list_state);
     }
 
     fn render_collapsed_view<B: Backend>(&self, frame: &mut Frame, app: &App, area: Rect) {
@@ -175,7 +209,14 @@ impl UI {
         // Determine which places to show based on filter
         let places_to_show: Vec<_> = if let Some("connected") = app.state.filter.as_deref() {
             // Show only places connected to the currently selected place
-            if let Some(Selection::Place(selected_id)) = app.state.selection {
+            // Get the place ID whether we're on a place or an affordance
+            let selected_id = match app.state.selection {
+                Some(Selection::Place(id)) => Some(id),
+                Some(Selection::Affordance { place_id, .. }) => Some(place_id),
+                None => None,
+            };
+
+            if let Some(selected_id) = selected_id {
                 let mut connected_places = std::collections::HashSet::new();
 
                 // Add outgoing connections
@@ -204,8 +245,18 @@ impl UI {
             app.breadboard.places.iter().collect()
         };
 
+        // Precompute incoming connection counts for performance
+        let mut incoming_counts = std::collections::HashMap::new();
+        for place in &app.breadboard.places {
+            for affordance in &place.affordances {
+                if let Some(dest_id) = &affordance.connects_to {
+                    *incoming_counts.entry(*dest_id).or_insert(0) += 1;
+                }
+            }
+        }
+
         for place in places_to_show {
-            let incoming_connections = app.breadboard.get_incoming_connections(&place.id);
+            let incoming_count = incoming_counts.get(&place.id).copied().unwrap_or(0);
             let outgoing_connections: Vec<_> = place.affordances.iter()
                 .filter_map(|a| a.connects_to.as_ref())
                 .filter_map(|dest_id| app.breadboard.find_place(dest_id))
@@ -219,8 +270,8 @@ impl UI {
 
             let mut place_info = format!("{} ({})", place.name, place.affordances.len());
 
-            if !incoming_connections.is_empty() {
-                place_info.push_str(&format!(" ← {}", incoming_connections.len()));
+            if incoming_count > 0 {
+                place_info.push_str(&format!(" ← {}", incoming_count));
             }
 
             if !outgoing_connections.is_empty() {
@@ -343,6 +394,41 @@ impl UI {
             .block(Block::default()
                 .borders(Borders::ALL)
                 .title("Select file to open"));
+
+        frame.render_widget(list, area);
+    }
+
+    fn render_place_search<B: Backend>(&self, frame: &mut Frame, app: &App, area: Rect) {
+        let mut items = Vec::new();
+
+        if app.state.place_search_results.is_empty() {
+            items.push(ListItem::new(Line::from(Span::styled(
+                "No places found",
+                Style::default().fg(Color::Gray),
+            ))));
+        } else {
+            for (index, place_id) in app.state.place_search_results.iter().enumerate() {
+                let is_selected = Some(index) == app.state.selected_place_result;
+                let style = if is_selected {
+                    Style::default().bg(Color::Blue).fg(Color::White)
+                } else {
+                    Style::default()
+                };
+
+                if let Some(place) = app.breadboard.find_place(place_id) {
+                    items.push(ListItem::new(Line::from(Span::styled(
+                        &place.name,
+                        style,
+                    ))));
+                }
+            }
+        }
+
+        let title = format!("Jump to place: {}", app.state.place_search_buffer);
+        let list = List::new(items)
+            .block(Block::default()
+                .borders(Borders::ALL)
+                .title(title));
 
         frame.render_widget(list, area);
     }

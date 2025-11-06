@@ -107,7 +107,6 @@ fn handle_action(app: &mut App, file_manager: &FileManager, action: Action) -> R
 
         Action::NewPlace => handle_new_place(app),
         Action::NewAffordance => handle_new_affordance(app),
-        Action::NewConnection => handle_new_connection(app),
         Action::RemoveConnection => handle_remove_connection(app),
 
         Action::ToggleCollapsed => app.toggle_collapsed(),
@@ -153,39 +152,46 @@ fn navigate_up(app: &mut App) {
                 }
             }
         }
-        _ => {
-            // Regular navigation
-            match &app.state.selection {
-                Some(Selection::Place(current_id)) => {
-                    let places = &app.breadboard.places;
-                    if let Some(current_index) = places.iter().position(|p| &p.id == current_id) {
-                        if current_index > 0 {
-                            app.state.selection = Some(Selection::Place(places[current_index - 1].id));
-                        }
+        Mode::Navigate => {
+            if app.state.is_searching_places {
+                // Navigate up in place search results
+                if let Some(selected_index) = app.state.selected_place_result {
+                    if selected_index > 0 {
+                        app.state.selected_place_result = Some(selected_index - 1);
                     }
                 }
-                Some(Selection::Affordance { place_id, affordance_id }) => {
-                    if let Some(place) = app.breadboard.find_place(place_id) {
-                        if let Some(current_index) = place.affordances.iter().position(|a| &a.id == affordance_id) {
-                            if current_index > 0 {
-                                app.state.selection = Some(Selection::Affordance {
-                                    place_id: *place_id,
-                                    affordance_id: place.affordances[current_index - 1].id,
-                                });
-                            } else {
-                                // Move to the place itself
-                                app.state.selection = Some(Selection::Place(*place_id));
+            } else {
+                // Up: Navigate within place hierarchy
+                match &app.state.selection {
+                    Some(Selection::Affordance { place_id, affordance_id }) => {
+                        // If on an affordance, move to previous affordance or back to place
+                        if let Some(place) = app.breadboard.find_place(place_id) {
+                            if let Some(current_index) = place.affordances.iter().position(|a| &a.id == affordance_id) {
+                                if current_index > 0 {
+                                    // Move to previous affordance
+                                    app.state.selection = Some(Selection::Affordance {
+                                        place_id: *place_id,
+                                        affordance_id: place.affordances[current_index - 1].id,
+                                    });
+                                } else {
+                                    // Move back to the place itself
+                                    app.state.selection = Some(Selection::Place(*place_id));
+                                }
                             }
                         }
                     }
-                }
-                None => {
-                    if let Some(first_place) = app.breadboard.places.first() {
-                        app.state.selection = Some(Selection::Place(first_place.id));
+                    Some(Selection::Place(_)) => {
+                        // On a place, up does nothing (or could go to previous place)
+                    }
+                    None => {
+                        if let Some(first_place) = app.breadboard.places.first() {
+                            app.state.selection = Some(Selection::Place(first_place.id));
+                        }
                     }
                 }
             }
         }
+        _ => {}
     }
 }
 
@@ -207,100 +213,99 @@ fn navigate_down(app: &mut App) {
                 }
             }
         }
-        _ => {
-            // Regular navigation
-            match &app.state.selection {
-                Some(Selection::Place(current_id)) => {
-                    let places = &app.breadboard.places;
-                    if let Some(current_index) = places.iter().position(|p| &p.id == current_id) {
-                        if current_index < places.len() - 1 {
-                            app.state.selection = Some(Selection::Place(places[current_index + 1].id));
-                        }
+        Mode::Navigate => {
+            if app.state.is_searching_places {
+                // Navigate down in place search results
+                if let Some(selected_index) = app.state.selected_place_result {
+                    if selected_index < app.state.place_search_results.len() - 1 {
+                        app.state.selected_place_result = Some(selected_index + 1);
                     }
                 }
-                Some(Selection::Affordance { place_id, affordance_id }) => {
-                    if let Some(place) = app.breadboard.find_place(place_id) {
-                        if let Some(current_index) = place.affordances.iter().position(|a| &a.id == affordance_id) {
-                            if current_index < place.affordances.len() - 1 {
+            } else {
+                // Down: Navigate within place hierarchy
+                match &app.state.selection {
+                    Some(Selection::Place(place_id)) => {
+                        // If on a place, move into first affordance if it exists
+                        if let Some(place) = app.breadboard.find_place(place_id) {
+                            if !place.affordances.is_empty() {
                                 app.state.selection = Some(Selection::Affordance {
                                     place_id: *place_id,
-                                    affordance_id: place.affordances[current_index + 1].id,
+                                    affordance_id: place.affordances[0].id,
                                 });
-                            } else {
-                                // Move to next place
-                                if let Some(current_place_index) = app.breadboard.places.iter().position(|p| &p.id == place_id) {
-                                    if current_place_index < app.breadboard.places.len() - 1 {
-                                        let next_place_id = app.breadboard.places[current_place_index + 1].id;
-                                        app.state.selection = Some(Selection::Place(next_place_id));
-                                    }
-                                }
                             }
                         }
                     }
-                }
-                None => {
-                    if let Some(first_place) = app.breadboard.places.first() {
-                        app.state.selection = Some(Selection::Place(first_place.id));
+                    Some(Selection::Affordance { place_id, affordance_id }) => {
+                        // If on an affordance, move to next affordance
+                        if let Some(place) = app.breadboard.find_place(place_id) {
+                            if let Some(current_index) = place.affordances.iter().position(|a| &a.id == affordance_id) {
+                                if current_index < place.affordances.len() - 1 {
+                                    // Move to next affordance
+                                    app.state.selection = Some(Selection::Affordance {
+                                        place_id: *place_id,
+                                        affordance_id: place.affordances[current_index + 1].id,
+                                    });
+                                }
+                                // If at last affordance, stay there
+                            }
+                        }
+                    }
+                    None => {
+                        if let Some(first_place) = app.breadboard.places.first() {
+                            app.state.selection = Some(Selection::Place(first_place.id));
+                        }
                     }
                 }
             }
         }
+        _ => {}
     }
 }
 
 fn navigate_right(app: &mut App) {
-    // Tab: Go into affordances of current place, or to next affordance
-    match &app.state.selection {
-        Some(Selection::Place(place_id)) => {
-            if let Some(place) = app.breadboard.find_place(place_id) {
-                if !place.affordances.is_empty() {
-                    // Go to first affordance
-                    app.state.selection = Some(Selection::Affordance {
-                        place_id: *place_id,
-                        affordance_id: place.affordances[0].id,
-                    });
-                } else {
-                    // No affordances - provide feedback by staying in place
-                    // User can use ↑/↓ to go to next/previous place
-                }
+    // Tab: Move to next place
+    let current_place_id = match &app.state.selection {
+        Some(Selection::Place(id)) => Some(*id),
+        Some(Selection::Affordance { place_id, .. }) => Some(*place_id),
+        None => None,
+    };
+
+    if let Some(current_id) = current_place_id {
+        let places = &app.breadboard.places;
+        if let Some(current_index) = places.iter().position(|p| p.id == current_id) {
+            if current_index < places.len() - 1 {
+                // Move to next place
+                app.state.selection = Some(Selection::Place(places[current_index + 1].id));
             }
         }
-        Some(Selection::Affordance { place_id, affordance_id }) => {
-            // Already in affordances, go to next affordance
-            if let Some(place) = app.breadboard.find_place(place_id) {
-                if let Some(current_index) = place.affordances.iter().position(|a| &a.id == affordance_id) {
-                    if current_index < place.affordances.len() - 1 {
-                        app.state.selection = Some(Selection::Affordance {
-                            place_id: *place_id,
-                            affordance_id: place.affordances[current_index + 1].id,
-                        });
-                    }
-                    // If at last affordance, stay there - don't auto-navigate to next place
-                }
-            }
-        }
-        None => {
-            if let Some(first_place) = app.breadboard.places.first() {
-                app.state.selection = Some(Selection::Place(first_place.id));
-            }
+    } else {
+        // No selection, go to first place
+        if let Some(first_place) = app.breadboard.places.first() {
+            app.state.selection = Some(Selection::Place(first_place.id));
         }
     }
 }
 
 fn navigate_left(app: &mut App) {
-    // Shift+Tab: Go to parent place
-    match &app.state.selection {
-        Some(Selection::Affordance { place_id, .. }) => {
-            app.state.selection = Some(Selection::Place(*place_id));
-        }
-        Some(Selection::Place(_)) => {
-            // Already at place level, stay there - don't auto-navigate up
-            // User can use ↑/↓ to navigate between places
-        }
-        None => {
-            if let Some(first_place) = app.breadboard.places.first() {
-                app.state.selection = Some(Selection::Place(first_place.id));
+    // Shift+Tab: Move to previous place
+    let current_place_id = match &app.state.selection {
+        Some(Selection::Place(id)) => Some(*id),
+        Some(Selection::Affordance { place_id, .. }) => Some(*place_id),
+        None => None,
+    };
+
+    if let Some(current_id) = current_place_id {
+        let places = &app.breadboard.places;
+        if let Some(current_index) = places.iter().position(|p| p.id == current_id) {
+            if current_index > 0 {
+                // Move to previous place
+                app.state.selection = Some(Selection::Place(places[current_index - 1].id));
             }
+        }
+    } else {
+        // No selection, go to first place
+        if let Some(first_place) = app.breadboard.places.first() {
+            app.state.selection = Some(Selection::Place(first_place.id));
         }
     }
 }
@@ -308,20 +313,30 @@ fn navigate_left(app: &mut App) {
 fn handle_select(app: &mut App, file_manager: &FileManager) {
     match app.state.mode {
         Mode::Navigate => {
-            match &app.state.selection {
-                Some(Selection::Affordance { place_id, affordance_id }) => {
-                    if let Some(place) = app.breadboard.find_place(place_id) {
-                        if let Some(affordance) = place.affordances.iter().find(|a| &a.id == affordance_id) {
-                            if let Some(dest_id) = &affordance.connects_to {
-                                app.navigate_to_place(*dest_id);
+            if app.state.is_searching_places {
+                // In place search mode, jump to selected place
+                if let Some(place) = app.get_selected_search_place() {
+                    let place_id = place.id;
+                    app.state.selection = Some(Selection::Place(place_id));
+                    app.clear_place_search();
+                }
+            } else {
+                // Normal navigation
+                match &app.state.selection {
+                    Some(Selection::Affordance { place_id, affordance_id }) => {
+                        if let Some(place) = app.breadboard.find_place(place_id) {
+                            if let Some(affordance) = place.affordances.iter().find(|a| &a.id == affordance_id) {
+                                if let Some(dest_id) = &affordance.connects_to {
+                                    app.navigate_to_place(*dest_id);
+                                }
                             }
                         }
                     }
+                    Some(Selection::Place(_)) => {
+                        // Could enter edit mode when pressing Enter on a place
+                    }
+                    None => {}
                 }
-                Some(Selection::Place(_)) => {
-                    // Could enter edit mode when pressing Enter on a place
-                }
-                None => {}
             }
         }
         Mode::Edit => {
@@ -413,7 +428,13 @@ fn handle_back(app: &mut App) {
             app.clear_file_selection();
         }
         Mode::Navigate => {
-            app.navigate_back();
+            if app.state.is_searching_places {
+                // Exit place search mode
+                app.clear_place_search();
+            } else {
+                // Navigate back in trail
+                app.navigate_back();
+            }
         }
     }
 }
@@ -425,10 +446,11 @@ fn handle_new_place(app: &mut App) {
 }
 
 fn handle_new_affordance(app: &mut App) {
-    let place_id = if let Some(Selection::Place(id)) = app.state.selection {
-        id
-    } else {
-        return;
+    // Get the place ID whether we're on a place or an affordance
+    let place_id = match app.state.selection {
+        Some(Selection::Place(id)) => id,
+        Some(Selection::Affordance { place_id, .. }) => place_id,
+        None => return,
     };
 
     let affordance_count = app.breadboard.find_place(&place_id)
@@ -439,23 +461,6 @@ fn handle_new_affordance(app: &mut App) {
     app.add_affordance_to_place(&place_id, affordance);
 }
 
-fn handle_new_connection(app: &mut App) {
-    // Simple connection creation - connect to the next available place
-    if let Some(Selection::Affordance { place_id, affordance_id }) = &app.state.selection {
-        // Find first destination place that's not the current place
-        let dest_id = app.breadboard.places.iter()
-            .find(|p| p.id != *place_id)
-            .map(|p| p.id);
-
-        if let Some(dest_id) = dest_id {
-            if let Some(place) = app.breadboard.find_place_mut(place_id) {
-                if let Some(affordance) = place.affordances.iter_mut().find(|a| a.id == *affordance_id) {
-                    affordance.connects_to = Some(dest_id);
-                }
-            }
-        }
-    }
-}
 
 fn handle_remove_connection(app: &mut App) {
     // Remove connection from selected affordance ONLY
@@ -494,28 +499,6 @@ fn handle_save(app: &App, file_manager: &FileManager) -> Result<()> {
     Ok(())
 }
 
-fn handle_open(app: &mut App, file_manager: &FileManager) -> Result<()> {
-    let filename = "breadboard.toml";
-    if file_manager.file_exists(filename) {
-        match file_manager.load_from_file(filename) {
-            Ok(breadboard) => {
-                app.breadboard = breadboard;
-                app.state.selection = None;
-                // Reset selection to first place if available
-                if let Some(first_place) = app.breadboard.places.first() {
-                    app.state.selection = Some(Selection::Place(first_place.id));
-                }
-            }
-            Err(e) => {
-                eprintln!("Failed to load: {}", e);
-            }
-        }
-    } else {
-        // In a real app, you'd show "file not found" message
-        eprintln!("File {} not found", filename);
-    }
-    Ok(())
-}
 
 fn handle_enter_edit_mode(app: &mut App) {
     // Enter edit mode for the currently selected item
@@ -604,14 +587,39 @@ fn handle_edit(app: &mut App, text_change: String) {
             // No text editing in file opening mode
         }
         Mode::Navigate => {
-            // No text editing in navigate mode
+            if app.state.is_searching_places {
+                // Handle place search text editing
+                if text_change == "backspace" {
+                    app.state.place_search_buffer.pop();
+                    app.update_place_search();
+                } else if text_change == "delete" {
+                    if !app.state.place_search_buffer.is_empty() {
+                        app.state.place_search_buffer.pop();
+                        app.update_place_search();
+                    }
+                } else if text_change == "left" || text_change == "right" || text_change == "home" || text_change == "end" {
+                    // Cursor movement - simplified for now
+                } else if !text_change.is_empty() {
+                    // Add character to search buffer
+                    app.state.place_search_buffer.push_str(&text_change);
+                    app.update_place_search();
+                }
+            } else {
+                // Start place search with first character
+                if !text_change.is_empty() && text_change != "backspace" && text_change != "delete"
+                   && text_change != "left" && text_change != "right" && text_change != "home" && text_change != "end" {
+                    app.start_place_search();
+                    app.state.place_search_buffer.push_str(&text_change);
+                    app.update_place_search();
+                }
+            }
         }
     }
 }
 
 fn handle_enter_connect_mode(app: &mut App) {
     // Only allow connection mode when on an affordance
-    if let Some(Selection::Affordance { place_id, affordance_id }) = &app.state.selection {
+    if let Some(Selection::Affordance { .. }) = &app.state.selection {
         app.state.mode = Mode::Connect;
         app.start_connection_search();
     }

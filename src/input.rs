@@ -21,7 +21,6 @@ pub enum Action {
     Back,
     NewPlace,
     NewAffordance,
-    NewConnection,
     ToggleCollapsed,
     Filter,
     Save,
@@ -105,7 +104,9 @@ impl InputHandler {
             KeyCode::Char('a') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                 Action::NewAffordance
             }
-            KeyCode::Char('c') => Action::ToggleCollapsed,
+            KeyCode::Char('c') if !key.modifiers.contains(KeyModifiers::CONTROL) => {
+                Action::ToggleCollapsed
+            }
             KeyCode::Char('f') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                 Action::Filter
             }
@@ -117,6 +118,12 @@ impl InputHandler {
             }
             KeyCode::Char('q') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                 Action::Quit
+            }
+
+            // Any other character starts place search
+            KeyCode::Char(c) if !key.modifiers.contains(KeyModifiers::CONTROL)
+                             && !key.modifiers.contains(KeyModifiers::ALT) => {
+                Action::Edit(c.to_string())
             }
 
             _ => Action::None,

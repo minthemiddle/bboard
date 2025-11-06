@@ -30,10 +30,6 @@ impl FileManager {
         Ok(breadboard)
     }
 
-    pub fn file_exists<P: AsRef<Path>>(&self, path: P) -> bool {
-        Path::new(path.as_ref()).exists()
-    }
-
     pub fn list_toml_files(&self) -> Result<Vec<String>> {
         let current_dir = std::env::current_dir()
             .context("Failed to get current directory")?;
@@ -97,21 +93,6 @@ mod tests {
         assert_eq!(loaded.places.len(), 1);
         assert_eq!(loaded.places[0].name, "Test Place");
         assert_eq!(loaded.places[0].id, place_id);
-
-        Ok(())
-    }
-
-    #[test]
-    fn test_file_exists() -> Result<()> {
-        let fm = FileManager::new();
-
-        let temp_file = NamedTempFile::new()?;
-        let path = temp_file.path();
-
-        assert!(fm.file_exists(path));
-
-        let non_existent = path.join("non_existent.toml");
-        assert!(!fm.file_exists(non_existent));
 
         Ok(())
     }

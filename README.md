@@ -11,6 +11,7 @@ Breadboarding is a method for sketching user interface flows using places, affor
 - **Text-based interface** - Focus on content over visuals
 - **Modal editing** - Navigate mode and Edit mode for precise control
 - **Quick navigation** - Arrow keys, Tab, and connection following
+- **Instant search** - Type to filter and jump to any place (vim-style)
 - **Connection management** - Visual links between places and affordances
 - **Collapsed/Expanded views** - Overview vs detailed view
 - **Filtering** - Show only connected places
@@ -20,13 +21,15 @@ Breadboarding is a method for sketching user interface flows using places, affor
 ## Controls
 
 ### Navigation Mode
-- `↑/↓` - Navigate between places (places are the main screens/pages)
-- `Tab` - Navigate into affordances (actions/buttons within a place)
-- `Shift+Tab` - Navigate back to parent place
-- `Enter` - Follow connections (on affordances)
+- `Tab` - Navigate to next place
+- `Shift+Tab` - Navigate to previous place
+- `↓` - Navigate into affordances (drill down) or move to next affordance
+- `↑` - Navigate to previous affordance or back to parent place
+- `Type any character` - Quick search/jump to place (fuzzy filter by name)
+- `Enter` - Follow connections (on affordances) or jump to place (in search)
 - `e` - Enter edit mode to edit selected place/affordance
 - `Delete` - Delete selected place or affordance
-- `Backspace/Esc` - Go back in navigation trail or cancel edit
+- `Backspace/Esc` - Go back in navigation trail or cancel search
 - `Ctrl+Q` - Quit
 
 ### Edit Mode
@@ -38,13 +41,14 @@ Breadboarding is a method for sketching user interface flows using places, affor
 - `Delete` - Delete selected place or affordance (from navigation mode)
 
 **Navigation Pattern:**
-1. Use `↑/↓` to select a place (like "Invoice", "Setup Autopay")
-2. Press `Tab` to go into that place's affordances (actions like "Turn on Autopay")
-3. Use `Tab` to navigate between affordances within the place (stays at last affordance)
-4. Use `Shift+Tab` to go back to the parent place level
-5. Press `Enter` on an affordance with a connection (→) to follow it
-6. Press `e` to edit the selected place or affordance name
-7. Use `↑/↓` to navigate between places at any level
+1. Use `Tab/Shift+Tab` to move between places (like "Invoice", "Setup Autopay")
+2. Press `↓` to drill down into that place's affordances (actions like "Turn on Autopay")
+3. Use `↓/↑` to navigate between affordances within the place
+4. Use `↑` to go back to the parent place level (from first affordance)
+5. **Quick Jump**: Type any character to search places by name, then `↑/↓` to select and `Enter` to jump
+6. Press `Enter` on an affordance with a connection (→) to follow it
+7. Press `e` to edit the selected place or affordance name
+8. Use `Tab/Shift+Tab` to jump between places at any time
 
 ### Creation
 - `Ctrl+N` - New place
@@ -126,16 +130,17 @@ cargo run
 The app starts with sample data demonstrating the Autopay flow from Basecamp's breadboarding guide.
 
 ### First Steps:
-1. **Navigate**: Use `↑/↓` to see different places (Invoice, Setup Autopay, Confirm)
-2. **Explore**: Press `Tab` on "Invoice" to see its affordances
-3. **Follow Connections**: Press `Enter` on "Turn on Autopay → Setup" to jump to the Setup place
-4. **Edit Items**: Select any place/affordance and press `e` to edit its name
-5. **Create Connections**: Select an affordance and press `Ctrl+C`, then type to search for places
-6. **Remove Connections**: Select an affordance with a connection and press `Ctrl+R` to remove it
-7. **Delete Items**: Select any place/affordance and press `Delete` to remove it
-8. **Navigate Back**: Press `Backspace` to return to the previous place
-9. **Filter**: Press `Ctrl+F` to see only places connected to your current selection
-10. **Try the 90s Example**: Press `Ctrl+O` and load `90s-personal-website.toml`
+1. **Navigate Between Places**: Use `Tab/Shift+Tab` to move between places (Invoice, Setup Autopay, Confirm)
+2. **Explore Within Places**: Press `↓` on "Invoice" to see its affordances
+3. **Navigate Affordances**: Use `↓/↑` to move between affordances, `↑` from first affordance returns to place
+4. **Follow Connections**: Press `Enter` on "Turn on Autopay → Setup" to jump to the Setup place
+5. **Edit Items**: Select any place/affordance and press `e` to edit its name
+6. **Create Connections**: Select an affordance and press `Ctrl+C`, then type to search for places
+7. **Remove Connections**: Select an affordance with a connection and press `Ctrl+R` to remove it
+8. **Delete Items**: Select any place/affordance and press `Delete` to remove it
+9. **Navigate Back**: Press `Backspace` to return to the previous place
+10. **Filter**: Press `Ctrl+F` to see only places connected to your current selection
+11. **Try the 90s Example**: Press `Ctrl+O` and load `90s-personal-website.toml`
 
 ### Understanding the Display:
 - **Places** are shown as headers: `┌─ Invoice`

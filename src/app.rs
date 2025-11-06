@@ -21,6 +21,10 @@ pub struct AppState {
     pub selected_connection_result: Option<usize>,
     pub file_list: Vec<String>,
     pub selected_file_index: Option<usize>,
+    pub place_search_buffer: String,
+    pub place_search_results: Vec<Uuid>,
+    pub selected_place_result: Option<usize>,
+    pub is_searching_places: bool, // True when actively searching for places in Navigate mode
 }
 
 impl Default for AppState {
@@ -37,6 +41,10 @@ impl Default for AppState {
             selected_connection_result: None,
             file_list: Vec::new(),
             selected_file_index: None,
+            place_search_buffer: String::new(),
+            place_search_results: Vec::new(),
+            selected_place_result: None,
+            is_searching_places: false,
         }
     }
 }
@@ -197,6 +205,90 @@ impl App {
     pub fn clear_file_selection(&mut self) {
         self.state.file_list.clear();
         self.state.selected_file_index = None;
+    }
+
+    // Calculate the index of the currently selected item in the rendered list
+    // This is used for scrolling to keep the selected item visible
+    pub fn get_selected_item_index(&self) -> Option<usize> {
+        let mut index = 0;
+
+        for place in &self.breadboard.places {
+            // Count place header
+            if self.state.selection == Some(Selection::Place(place.id)) {
+                return Some(index);
+            }
+            index += 1;
+
+            // Count affordances
+            for affordance in &place.affordances {
+                if self.state.selection == Some(Selection::Affordance {
+                    place_id: place.id,
+                    affordance_id: affordance.id
+                }) {
+                    return Some(index);
+                }
+                index += 1;
+            }
+
+            // Count footer and spacing
+            index += 1; // footer
+            index += 1; // spacing
+        }
+
+        None
+    }
+
+    // Place search methods (for quick navigation)
+    pub fn start_place_search(&mut self) {
+        self.state.place_search_buffer.clear();
+        self.state.place_search_results.clear();
+        self.state.selected_place_result = None;
+        self.state.is_searching_places = true;
+        self.update_place_search();
+    }
+
+    pub fn update_place_search(&mut self) {
+        let mut results = Vec::new();
+
+        if self.state.place_search_buffer.is_empty() {
+            // Show all places
+            results.extend(self.breadboard.places.iter().map(|p| p.id));
+        } else {
+            let search_lower = self.state.place_search_buffer.to_lowercase();
+            // Add matching places
+            results.extend(self.breadboard.places.iter()
+                .filter(|p| p.name.to_lowercase().contains(&search_lower))
+                .map(|p| p.id));
+        }
+
+        self.state.place_search_results = results;
+
+        // Auto-select first result
+        self.state.selected_place_result = if self.state.place_search_results.is_empty() {
+            None
+        } else {
+            Some(0)
+        };
+    }
+
+    pub fn clear_place_search(&mut self) {
+        self.state.place_search_buffer.clear();
+        self.state.place_search_results.clear();
+        self.state.selected_place_result = None;
+        self.state.is_searching_places = false;
+    }
+
+    pub fn get_selected_search_place(&self) -> Option<&Place> {
+        if let Some(selected_index) = self.state.selected_place_result {
+            if selected_index < self.state.place_search_results.len() {
+                let place_id = &self.state.place_search_results[selected_index];
+                self.breadboard.find_place(place_id)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 }
 

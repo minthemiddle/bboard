@@ -67,6 +67,7 @@ impl App {
         }
     }
 
+    #[cfg(test)]
     pub fn new_place(&mut self, name: String) {
         let place = Place::new(name);
         self.breadboard.add_place(place);

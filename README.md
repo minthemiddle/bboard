@@ -80,26 +80,31 @@ When in connection mode (selected affordance + Ctrl+C):
 
 ## Data Format
 
-Breadboards are saved as TOML files:
+Breadboards are saved as TOML files. Each place and affordance requires a unique UUID `id` field:
 
 ```toml
 name = "My Breadboard"
 created = "2025-01-15T10:00:00Z"
 
 [[places]]
+id = "550e8400-e29b-41d4-a716-446655440000"
 name = "Invoice"
 
 [[places.affordances]]
+id = "550e8400-e29b-41d4-a716-446655440001"
 name = "Turn on Autopay"
-connects_to = "place-uuid"
+connects_to = "550e8400-e29b-41d4-a716-446655440002"
 
 [[places]]
+id = "550e8400-e29b-41d4-a716-446655440002"
 name = "Setup Autopay"
 
 [[places.affordances]]
+id = "550e8400-e29b-41d4-a716-446655440003"
 name = "CC Fields"
-connects_to = "place-uuid"
 ```
+
+**Note:** The app automatically generates UUIDs when creating places and affordances through the UI. If you're manually editing TOML files, ensure each place and affordance has a unique UUID `id` field.
 
 ## Examples
 

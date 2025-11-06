@@ -2,38 +2,49 @@ name = "Autopay Feature Example"
 created = "2025-01-15T10:00:00Z"
 
 [[places]]
+id = "63954bc8-ecf6-4bc3-b883-7a5248de46e1"
 name = "Invoice"
 
 [[places.affordances]]
+id = "96bca5e3-8937-4450-8f94-39ac5053754b"
 name = "Turn on Autopay"
 connects_to = "423f4a7b-8c9d-4e5f-6a7b-8c9d0e1f2a3b"
 
 [[places.affordances]]
+id = "47f11506-70a3-44f9-826a-6afccc364451"
 name = "View Details"
 
 [[places.affordances]]
+id = "d035bc57-f460-4ffc-b40c-cec02ae8cb84"
 name = "Download PDF"
 
 [[places]]
+id = "ea0bdd47-e154-4b22-be5b-5c8709a06e3a"
 name = "Setup Autopay"
 
 [[places.affordances]]
+id = "9f456aff-94a1-487e-b53b-a104d90f8a54"
 name = "CC Fields"
 connects_to = "6789abcd-ef12-3456-789a-bcdef0123456"
 
 [[places.affordances]]
+id = "f771fe3e-3024-4140-b07a-e4a017ee9e16"
 name = "ACH Option"
 connects_to = "6789abcd-ef12-3456-789a-bcdef0123456"
 
 [[places.affordances]]
+id = "b6c6991d-39d5-4b3f-a6d3-94cef7892d9f"
 name = "Cancel"
 connects_to = "12345678-9abc-def0-1234-56789abcdef0"
 
 [[places]]
+id = "9382d99c-bcc3-415a-8015-4ba3a4c53153"
 name = "Confirm"
 
 [[places.affordances]]
+id = "a5d3d267-3b71-4ea2-b7b8-cfb99aa80674"
 name = "Thank You Message"
 
 [[places.affordances]]
+id = "2c7f4c8e-09c7-413c-b907-a42fe298b2c9"
 name = "Print Receipt"

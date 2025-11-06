@@ -3,400 +3,501 @@ created = "2025-01-15T10:00:00Z"
 
 # The glorious entrance to your digital paradise
 [[places]]
+id = "0b34ff33-12b4-4571-8caa-69a23bbcc5e9"
 name = "Under Construction Landing Page"
 
 [[places.affordances]]
+id = "b4ffc863-5ed9-458e-a8bc-ab22b96920ae"
 name = "Enter Website (if you dare!)"
 connects_to = "550e8400-e29b-41d4-a716-446655440001"
 
 [[places.affordances]]
+id = "50296a5a-04e2-4a93-9f36-69a4bdcffdcf"
 name = "Best viewed in Netscape Navigator 3.0"
 connects_to = "550e8400-e29b-41d4-a716-446655440002"
 
 [[places.affordances]]
+id = "98012679-596e-417d-9370-bd8c32f43bd3"
 name = "Sign my Guestbook!"
 connects_to = "550e8400-e29b-41d4-a716-446655440003"
 
 [[places.affordances]]
+id = "6337b68b-0bc1-4518-aade-932bd5682266"
 name = "MIDI Music Controls"
 connects_to = "550e8400-e29b-41d4-a716-446655440004"
 
 [[places.affordances]]
+id = "84175f66-f77d-4c05-b513-234c5ee8692e"
 name = "View my Webring"
 connects_to = "550e8400-e29b-41d4-a716-446655440005"
 
 [[places.affordances]]
+id = "726e6f69-2a70-41a9-8b42-b11a4748dc9e"
 name = "Email Me (Webmaster@cool-site.com)"
 
 # Browser compatibility check
 [[places]]
+id = "412b3821-150e-49a4-b23e-105986a09a0f"
 name = "Browser Compatibility Warning"
 
 [[places.affordances]]
+id = "da861d00-eaa0-4e5e-9a9a-efc5842a8a22"
 name = "I'm using Netscape (Continue)"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 [[places.affordances]]
+id = "4eaaeaf1-5865-4094-88d6-d2fcfcffc58c"
 name = "I'm using IE (You're brave!)"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 [[places.affordances]]
+id = "cce581fe-50fc-4ed4-ae94-29a11b4b73ea"
 name = "Download Netscape Now!"
 connects_to = "550e8400-e29b-41d4-a716-446655440007"
 
 # The main experience
 [[places]]
+id = "5ab53c59-0914-4fe3-af0f-d503fa11e90a"
 name = "Personal Homepage with Animated GIFs"
 
 [[places.affordances]]
+id = "734daaf2-52b3-4c63-bea0-3726f54e83e1"
 name = "About Me (The Webmaster)"
 connects_to = "550e8400-e29b-41d4-a716-446655440008"
 
 [[places.affordances]]
+id = "ffe7c0ae-01ae-4f6f-8ed0-8c948121cf03"
 name = "My Cool Hobbies"
 connects_to = "550e8400-e29b-41d4-a716-446655440009"
 
 [[places.affordances]]
+id = "cffce743-b99f-426e-9e44-36e1a8294c97"
 name = "Photo Gallery (Scanned Pics!)"
 connects_to = "550e8400-e29b-41d4-a716-44665544000a"
 
 [[places.affordances]]
+id = "2751219d-b8fa-4af7-9fe4-c5354d3db572"
 name = "My Friends' Links"
 connects_to = "550e8400-e29b-41d4-a716-44665544000b"
 
 [[places.affordances]]
+id = "4335f5bd-eae5-43bc-8680-5fe18cba1942"
 name = "Download Desktop Theme"
 connects_to = "550e8400-e29b-41d4-a716-44665544000c"
 
 [[places.affordances]]
+id = "b87f49a0-e835-412d-aed0-b9b13c4df5e7"
 name = "Chat Room (Java Applet)"
 connects_to = "550e8400-e29b-41d4-a716-44665544000d"
 
 [[places.affordances]]
+id = "0af4cf23-5c43-46f2-8e47-e124960cb899"
 name = "Hit Counter (00042 visits!)"
 
 # About the legendary webmaster
 [[places]]
+id = "39a09345-d6a8-4258-aeca-14f795eca3dd"
 name = "About The Webmaster"
 
 [[places.affordances]]
+id = "8f18453d-6c58-4b3e-9e8f-3860649082ca"
 name = "My Computer Specs (Pentium II 266MHz!)"
 connects_to = "550e8400-e29b-41d4-a716-44665544000e"
 
 [[places.affordances]]
+id = "040bc7c3-81e6-41df-afca-2d1500cdece7"
 name = "My ICQ Number (12345678)"
 connects_to = "550e8400-e29b-41d4-a716-44665544000f"
 
 [[places.affordances]]
+id = "5b3bc781-e36a-4f43-a314-60f5adfb8d22"
 name = "My AOL Instant Messenger"
 connects_to = "550e8400-e29b-41d4-a716-446655440010"
 
 [[places.affordances]]
+id = "50c218a5-17df-44d9-84c4-925b4a5af1b2"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 [[places.affordances]]
+id = "9eaf6c01-8850-48a8-96aa-cf35d9b332c3"
 name = "View my ASCII Art Collection"
 connects_to = "550e8400-e29b-41d4-a716-446655440011"
 
 # Hobbies section
 [[places]]
+id = "39eebfa8-c328-4cdd-a6e5-1c0c35a0b66c"
 name = "My Awesome Hobbies"
 
 [[places.affordances]]
+id = "0c612d20-4e38-4efb-a582-59cb3db9bc1b"
 name = "HTML Coding (I'm an expert!)"
 connects_to = "550e8400-e29b-41d4-a716-446655440012"
 
 [[places.affordances]]
+id = "b0cb41ff-2ef4-4564-9ff3-ee73fc86de9b"
 name = "Quake II Gaming"
 connects_to = "550e8400-e29b-41d4-a716-446655440013"
 
 [[places.affordances]]
+id = "d65f9151-cd88-4be8-bea4-e4490a5c10e9"
 name = "WinAmp Skins Creation"
 connects_to = "550e8400-e29b-41d4-a716-446655440014"
 
 [[places.affordances]]
+id = "93d895ff-b6e7-4a23-9d1e-dd2b6198f02f"
 name = "Collecting Beanie Babies"
 connects_to = "550e8400-e29b-41d4-a716-446655440015"
 
 [[places.affordances]]
+id = "fe93dd21-cfa4-450c-bfdb-6f91717e4426"
 name = "Making Mixed Tapes"
 connects_to = "550e8400-e29b-41d4-a716-446655440016"
 
 [[places.affordances]]
+id = "46423f54-fbd5-424b-9213-9a3ddcc8b278"
 name = "Watching The X-Files"
 connects_to = "550e8400-e29b-41d4-a716-446655440017"
 
 [[places.affordances]]
+id = "949b62da-3569-4ea0-99d3-964f1f92c3f5"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Photo gallery
 [[places]]
+id = "cd51655f-2da1-4670-985e-2966f894aef8"
 name = "Photo Gallery (Scanned Photos!)"
 
 [[places.affordances]]
+id = "4e5b15e3-3f3b-4616-885d-d48dbc0f7dad"
 name = "Me with my Friends (1997)"
 connects_to = "550e8400-e29b-41d4-a716-446655440018"
 
 [[places.affordances]]
+id = "7eec3149-b8b6-4ac1-a72d-b7b62ec6ed18"
 name = "My First Computer"
 connects_to = "550e8400-e29b-41d4-a716-446655440019"
 
 [[places.affordances]]
+id = "d1277961-e1ff-4578-897f-f780d7fd2a24"
 name = "School Trip Photos"
 connects_to = "550e8400-e29b-41d4-a716-44665544001a"
 
 [[places.affordances]]
+id = "581982dd-0757-49cb-a217-7aa6efe379ed"
 name = "My Band Practice"
 connects_to = "550e8400-e29b-41d4-a716-44665544001b"
 
 [[places.affordances]]
+id = "00208ba0-1c27-4982-8ff3-7c758f5fd4fa"
 name = "Dancing Baby GIF Collection"
 connects_to = "550e8400-e29b-41d4-a716-44665544001c"
 
 [[places.affordances]]
+id = "7912ab1e-aa3a-40cb-829c-6eda2ad0bcb3"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Links page
 [[places]]
+id = "945c175f-2b5b-495a-94b8-c18fedf1968b"
 name = "Cool Links Page"
 
 [[places.affordances]]
+id = "2aa4668a-b414-4f78-981f-04877a8519c8"
 name = "Yahoo! (The Original Search!)"
 connects_to = "550e8400-e29b-41d4-a716-44665544001d"
 
 [[places.affordances]]
+id = "97451908-ba65-4f1a-87d6-b16e5b74095a"
 name = "GeoCities (My Neighbor!)"
 connects_to = "550e8400-e29b-41d4-a716-44665544001e"
 
 [[places.affordances]]
+id = "0dc2b08f-c765-43bb-9ed2-fff9785c1799"
 name = "Angelfire Websites"
 connects_to = "550e8400-e29b-41d4-a716-44665544001f"
 
 [[places.affordances]]
+id = "de979e42-1511-4bc3-a31b-03e68e9177b3"
 name = "My Friend Mike's Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440020"
 
 [[places.affordances]]
+id = "077fdc27-6a35-4616-8f64-89f6c2f5169d"
 name = "JavaScript Games"
 connects_to = "550e8400-e29b-41d4-a716-446655440021"
 
 [[places.affordances]]
+id = "b9a8ef20-2cbb-47a4-8707-93890251b61d"
 name = "Add Your Link Here!"
 connects_to = "550e8400-e29b-41d4-a716-446655440022"
 
 [[places.affordances]]
+id = "24665565-b9c1-4f9b-ab02-b5a1a9527053"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Downloads section
 [[places]]
+id = "3349e294-a47f-4ed8-aac3-6268a6308b78"
 name = "Downloads Page"
 
 [[places.affordances]]
+id = "2dc2d6a4-a272-469c-8091-a89d1e876ca5"
 name = "Windows 95 Theme"
 connects_to = "550e8400-e29b-41d4-a716-446655440023"
 
 [[places.affordances]]
+id = "811e6528-1fce-4905-9407-c713d07e4007"
 name = "Cool Cursors (.cur files)"
 connects_to = "550e8400-e29b-41d4-a716-446655440024"
 
 [[places.affordances]]
+id = "68aae996-cdb1-44eb-b3d5-225cd0f1b7f2"
 name = "WinAmp Skins I Made"
 connects_to = "550e8400-e29b-41d4-a716-446655440025"
 
 [[places.affordances]]
+id = "f99f8c1d-821b-461c-a3c4-3604d87b30e8"
 name = "MIDI Files Collection"
 connects_to = "550e8400-e29b-41d4-a716-446655440026"
 
 [[places.affordances]]
+id = "7c2187e7-f2bb-4b8f-8edc-414e2ebe4e7e"
 name = "Screen Savers"
 connects_to = "550e8400-e29b-41d4-a716-446655440027"
 
 [[places.affordances]]
+id = "231d45b4-b3ae-498e-9102-4d88a75f1e30"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Guestbook
 [[places]]
+id = "063333b7-f1e3-4d1d-84bc-ae5a567514cd"
 name = "Sign My Guestbook"
 
 [[places.affordances]]
+id = "50933215-5cfa-4a74-b479-fa178a18e986"
 name = "Leave a Message"
 connects_to = "550e8400-e29b-41d4-a716-446655440028"
 
 [[places.affordances]]
+id = "48328c65-b865-4699-a4aa-ef23adfbb719"
 name = "Read Guestbook Entries"
 connects_to = "550e8400-e29b-41d4-a716-446655440029"
 
 [[places.affordances]]
+id = "2e7fd16d-8d94-4656-82eb-134c6f3fe685"
 name = "View Guestbook Map"
 connects_to = "550e8400-e29b-41d4-a716-44665544002a"
 
 [[places.affordances]]
+id = "53d9ea7c-9a1d-4efe-b41e-74105e9ed73a"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Chat room
 [[places]]
+id = "9d9ed742-a726-4124-8554-db8bab45f2d8"
 name = "Chat Room (Java Applet Loading...)"
 
 [[places.affordances]]
+id = "ae0034c5-87f2-4825-b933-f4b11b79eb5a"
 name = "Enter Chat Room"
 connects_to = "550e8400-e29b-41d4-a716-44665544002b"
 
 [[places.affordances]]
+id = "10173495-8c17-4d5a-ac91-308b738d177d"
 name = "Chat Rules"
 connects_to = "550e8400-e29b-41d4-a716-44665544002c"
 
 [[places.affordances]]
+id = "9014b907-0ed1-4a1d-9c81-b1a69abee616"
 name = "Regular Chatters"
 connects_to = "550e8400-e29b-41d4-a716-44665544002d"
 
 [[places.affordances]]
+id = "98f942d8-d192-4fb6-8173-93e98a3f75fd"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Webring
 [[places]]
+id = "06d56f60-8eae-4a8a-a5c6-25a3e22d3baa"
 name = "90s Kids Webring"
 
 [[places.affordances]]
+id = "c8065cec-33fd-4fac-bf24-6f6d245a3fe2"
 name = "Previous Site"
 connects_to = "550e8400-e29b-41d4-a716-44665544002e"
 
 [[places.affordances]]
+id = "040c9c03-62dc-4453-b9a2-7f4f78f9fa69"
 name = "Next Site"
 connects_to = "550e8400-e29b-41d4-a716-44665544002f"
 
 [[places.affordances]]
+id = "83d4b90a-32eb-4fa7-8409-8142d5034e9f"
 name = "Random Site"
 connects_to = "550e8400-e29b-41d4-a716-446655440030"
 
 [[places.affordances]]
+id = "feb19f79-2ab1-4827-a0c2-1e4136d71cd8"
 name = "Join Webring"
 connects_to = "550e8400-e29b-41d4-a716-446655440031"
 
 [[places.affordances]]
+id = "12cb9b86-cfc3-4459-9394-a1524d4cc4c7"
 name = "Webring Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440032"
 
 [[places.affordances]]
+id = "d50662be-0113-44d0-a4f8-0a185ab36c10"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Contact pages
 [[places]]
+id = "4d36faf3-3073-478a-a09b-315ee99a31d4"
 name = "Contact The Webmaster"
 
 [[places.affordances]]
+id = "273d1617-50aa-4401-a7c2-2c3faf878fbe"
 name = "Email Me"
 connects_to = "550e8400-e29b-41d4-a716-446655440033"
 
 [[places.affordances]]
+id = "ff386f98-1a6d-46e4-918b-78b13aac4e14"
 name = "My ICQ Panel"
 connects_to = "550e8400-e29b-41d4-a716-446655440034"
 
 [[places.affordances]]
+id = "4f5fc39f-5b34-4306-b6e9-ec8d78542fc1"
 name = "AIM Me"
 connects_to = "550e8400-e29b-41d4-a716-446655440035"
 
 [[places.affordances]]
+id = "6dcd918c-2cbf-43de-a006-3a99d9c5ffd2"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # MIDI music control
 [[places]]
+id = "21db4985-abac-4b35-9b6d-f37fed8a58b1"
 name = "Background Music Control"
 
 [[places.affordances]]
+id = "4a8bc471-ba20-4986-9d03-ac7c42b6c71d"
 name = "Play MIDI (All Star by Smash Mouth)"
 connects_to = "550e8400-e29b-41d4-a716-446655440036"
 
 [[places.affordances]]
+id = "10e67a2d-9581-47f4-aaa9-7f5b0d818876"
 name = "Stop Music"
 connects_to = "550e8400-e29b-41d4-a716-446655440037"
 
 [[places.affordances]]
+id = "254b7c92-0436-4aef-83d0-28348ea5971c"
 name = "Volume Control"
 connects_to = "550e8400-e29b-41d4-a716-446655440038"
 
 [[places.affordances]]
+id = "097af87c-9eee-40a3-8a13-c962e57a6fd1"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 # Placeholder places for external links
 [[places]]
+id = "1fd1fefe-a59c-43a3-9290-a7717287ff0e"
 name = "Netscape Download Page"
 
 [[places.affordances]]
+id = "e513faa5-4cc5-4aab-b300-38f29345f6cc"
 name = "Download Now! (8MB)"
 connects_to = "550e8400-e29b-41d4-a716-446655440039"
 
 [[places.affordances]]
+id = "aa84b049-e368-4ecc-bc09-001535ed6a39"
 name = "Back to Homepage"
 connects_to = "550e8400-e29b-41d4-a716-446655440006"
 
 [[places]]
+id = "ddc1d553-9f41-48a1-a468-32b30d047432"
 name = "Computer Specs Page"
 
 [[places.affordances]]
+id = "3c255c8f-57d2-4693-9954-e11f1020f291"
 name = "CPU: Pentium II 266MHz"
 connects_to = "550e8400-e29b-41d4-a716-44665544003a"
 
 [[places.affordances]]
+id = "bcad6ff5-e0fa-43cd-8638-844d2a5211ca"
 name = "RAM: 64MB SDRAM"
 connects_to = "550e8400-e29b-41d4-a716-44665544003b"
 
 [[places.affordances]]
+id = "03f6082b-a738-4732-bc87-24f74f779d7d"
 name = "Graphics: Voodoo 2 12MB"
 connects_to = "550e8400-e29b-41d4-a716-44665544003c"
 
 [[places.affordances]]
+id = "6832019c-8f8c-4be4-b071-febef58c5826"
 name = "Sound: Sound Blaster AWE64"
 connects_to = "550e8400-e29b-41d4-a716-44665544003d"
 
 [[places.affordances]]
+id = "3984378e-cd7d-4a7f-8548-e4a2743875e4"
 name = "Monitor: 17\" CRT"
 connects_to = "550e8400-e29b-41d4-a716-44665544003e"
 
 [[places.affordances]]
+id = "eb3f915c-6b19-4f5e-9369-7af7007bb172"
 name = "OS: Windows 98 SE"
 connects_to = "550e8400-e29b-41d4-a716-44665544003f"
 
 [[places.affordances]]
+id = "39b7c83d-8b19-4656-9439-f181fa03b443"
 name = "Back to About Me"
 connects_to = "550e8400-e29b-41d4-a716-446655440008"
 
 [[places]]
+id = "3925a6ca-f5ba-40fb-8862-9a819a66747d"
 name = "Guestbook Entry Form"
 
 [[places.affordances]]
+id = "5abdb917-c318-47ab-99ef-995e583582a1"
 name = "Name: [______]"
 connects_to = "550e8400-e29b-41d4-a716-446655440040"
 
 [[places.affordances]]
+id = "31ae0720-9bcb-4dc5-b10b-2ebeb8637a1c"
 name = "Email: [______@____.com]"
 connects_to = "550e8400-e29b-41d4-a716-446655440041"
 
 [[places.affordances]]
+id = "ef071412-63a6-44c5-9826-fb41b62d91bb"
 name = "Website: [http://______.com]"
 connects_to = "550e8400-e29b-41d4-a716-446655440042"
 
 [[places.affordances]]
+id = "b249a277-c870-4bfc-ace9-f621adfe5b93"
 name = "Message: [________________________]"
 connects_to = "550e8400-e29b-41d4-a716-446655440043"
 
 [[places.affordances]]
+id = "b75ad8b6-6882-42f0-a98b-d9d6d6e8bab1"
 name = "Sign Guestbook!"
 connects_to = "550e8400-e29b-41d4-a716-446655440044"
 
 [[places.affordances]]
+id = "b6dfdde2-bfd1-4385-a45a-47015b6013f2"
 name = "Reset Form"
 connects_to = "550e8400-e29b-41d4-a716-446655440045"
 
 [[places.affordances]]
+id = "0e7340fb-c17e-4296-a45c-dae6e4b34d45"
 name = "Back to Guestbook"
 connects_to = "550e8400-e29b-41d4-a716-446655440003"

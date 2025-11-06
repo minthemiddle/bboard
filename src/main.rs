@@ -42,9 +42,11 @@ fn main() -> Result<()> {
     // Load file from command line or create sample data
     let mut loaded_from_file = false;
     if let Some(file) = filename {
+        let file_str = file.clone();
         match file_manager.load_from_file(file) {
             Ok(breadboard) => {
                 app.breadboard = breadboard;
+                app.state.current_filename = Some(file_str);
                 loaded_from_file = true;
             }
             Err(e) => {
@@ -55,7 +57,7 @@ fn main() -> Result<()> {
                     LeaveAlternateScreen,
                     DisableMouseCapture
                 )?;
-                eprintln!("Error loading {}: {}", file, e);
+                eprintln!("Error loading {}: {}", file_str, e);
                 std::process::exit(1);
             }
         }
@@ -120,6 +122,7 @@ fn handle_action(app: &mut App, file_manager: &FileManager, action: Action) -> R
         Action::ToggleCollapsed => app.toggle_collapsed(),
 
         Action::Save => handle_save(app, file_manager)?,
+        Action::SaveAs => handle_save_as(app, file_manager)?,
         Action::Open => handle_enter_open_mode(app, file_manager)?,
         Action::EnterEditMode => handle_enter_edit_mode(app),
         Action::EnterConnectMode => handle_enter_connect_mode(app),
@@ -414,16 +417,21 @@ fn handle_select(app: &mut App, file_manager: &FileManager) {
             // Save with entered filename
             let filename = app.state.save_filename.clone();
             let _ = file_manager.save_to_file(&app.breadboard, &filename);
+            // Set as current filename
+            app.state.current_filename = Some(filename);
             // Exit save file mode
             app.state.mode = Mode::Navigate;
         }
         Mode::OpenFile => {
             // Open selected file
             if let Some(filename) = app.get_selected_file() {
+                let filename_str = filename.clone();
                 match file_manager.load_from_file(filename) {
                     Ok(breadboard) => {
                         app.breadboard = breadboard;
                         app.state.selection = None;
+                        // Set current filename
+                        app.state.current_filename = Some(filename_str);
                         // Reset selection to first place if available
                         if let Some(first_place) = app.breadboard.places.first() {
                             app.state.selection = Some(Selection::Place(first_place.id));
@@ -431,7 +439,7 @@ fn handle_select(app: &mut App, file_manager: &FileManager) {
                     }
                     Err(e) => {
                         // In a real app, you'd show an error message in the UI
-                        eprintln!("Failed to load {}: {}", filename, e);
+                        eprintln!("Failed to load {}: {}", filename_str, e);
                     }
                 }
             }
@@ -542,11 +550,24 @@ fn handle_remove_connection(app: &mut App) {
     }
 }
 
-fn handle_save(app: &mut App, _file_manager: &FileManager) -> Result<()> {
-    // Enter save file mode to prompt for filename
+fn handle_save(app: &mut App, file_manager: &FileManager) -> Result<()> {
+    // If we have a current filename, save directly
+    if let Some(filename) = &app.state.current_filename {
+        let _ = file_manager.save_to_file(&app.breadboard, filename);
+    } else {
+        // No current filename, prompt for one
+        app.state.mode = Mode::SaveFile;
+        app.state.save_filename = String::from("breadboard.toml");
+    }
+    Ok(())
+}
+
+fn handle_save_as(app: &mut App, _file_manager: &FileManager) -> Result<()> {
+    // Always prompt for filename (Save As)
     app.state.mode = Mode::SaveFile;
-    // Pre-fill with default filename
-    app.state.save_filename = String::from("breadboard.toml");
+    // Pre-fill with current filename if available, otherwise default
+    app.state.save_filename = app.state.current_filename.clone()
+        .unwrap_or_else(|| String::from("breadboard.toml"));
     Ok(())
 }
 

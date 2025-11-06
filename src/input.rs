@@ -26,6 +26,7 @@ pub enum Action {
     ToggleCollapsed,
     Filter,
     Save,
+    SaveAs,
     Open,
     EnterEditMode,
     EnterConnectMode,
@@ -116,6 +117,9 @@ impl InputHandler {
             }
             KeyCode::Char('f') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                 Action::Filter
+            }
+            KeyCode::Char('s') if key.modifiers.contains(KeyModifiers::CONTROL) && key.modifiers.contains(KeyModifiers::SHIFT) => {
+                Action::SaveAs
             }
             KeyCode::Char('s') if key.modifiers.contains(KeyModifiers::CONTROL) => {
                 Action::Save

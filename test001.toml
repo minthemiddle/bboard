@@ -1,0 +1,47 @@
+name = "New Breadboard"
+created = "2025-11-06T22:07:26.912668+00:00"
+
+[[places]]
+id = "c686053f-97f6-4f64-8406-aebe0f9bab20"
+name = "Place 1"
+
+[[places.affordances]]
+id = "39ea5476-bf52-4f72-b800-43ecf5c986b7"
+name = "Action 1"
+
+[[places.affordances]]
+id = "a8c8c59d-90a7-4502-883e-e9ce878a4c06"
+name = "Action 2"
+
+[[places]]
+id = "fb0cf4c3-e572-4248-bd2a-333ed5b3ae02"
+name = "Place 2"
+affordances = []
+
+[[places]]
+id = "0e12033d-8c67-43b7-be42-2a656eb0ba53"
+name = "Place 3"
+affordances = []
+
+[[places]]
+id = "e2cdef4f-f6ad-405b-917b-fc0a4f528dfb"
+name = "Place 4"
+
+[[places.affordances]]
+id = "3fa9e5ab-6be4-4ea1-abab-bac5c0328900"
+name = "Action 1"
+
+[[places]]
+id = "2271ebbf-5345-49c9-9427-b410886995ff"
+name = "Place 5"
+affordances = []
+
+[[places]]
+id = "bfa7faa8-ee78-4e25-bd21-5fe4926de27d"
+name = "Place 6"
+affordances = []
+
+[[places]]
+id = "81791ac5-bda0-411d-8ab5-37799ca38f10"
+name = "Place 7"
+affordances = []

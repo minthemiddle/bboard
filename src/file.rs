@@ -76,8 +76,8 @@ mod tests {
         let fm = FileManager::new();
         let mut breadboard = Breadboard::new("Test Board".to_string());
 
-        let place = crate::models::Place::new("Test Place".to_string());
-        let place_id = place.id;
+        let place_id = breadboard.generate_place_id();
+        let place = crate::models::Place::new(place_id, "Test Place".to_string());
         breadboard.add_place(place);
 
         let temp_file = NamedTempFile::new()?;
@@ -124,13 +124,14 @@ mod tests {
         let mut breadboard = Breadboard::new("Complex Board".to_string());
 
         // Create places with affordances and connections
-        let mut place1 = crate::models::Place::new("Place 1".to_string());
-        let place1_id = place1.id;
+        let place1_id = breadboard.generate_place_id();
+        let mut place1 = crate::models::Place::new(place1_id, "Place 1".to_string());
 
-        let place2 = crate::models::Place::new("Place 2".to_string());
-        let place2_id = place2.id;
+        let place2_id = breadboard.generate_place_id();
+        let place2 = crate::models::Place::new(place2_id, "Place 2".to_string());
 
-        let affordance = crate::models::Affordance::new("Go to Place 2".to_string())
+        let affordance_id = breadboard.generate_affordance_id();
+        let affordance = crate::models::Affordance::new(affordance_id, "Go to Place 2".to_string())
             .with_connection(place2_id);
         place1.add_affordance(affordance);
 

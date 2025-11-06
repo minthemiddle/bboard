@@ -167,7 +167,7 @@ impl UI {
         let mut items = Vec::new();
 
         // Precompute all incoming connections once for performance
-        let mut incoming_sources: std::collections::HashMap<uuid::Uuid, Vec<String>> = std::collections::HashMap::new();
+        let mut incoming_sources: std::collections::HashMap<u32, Vec<String>> = std::collections::HashMap::new();
         for place in &app.breadboard.places {
             for affordance in &place.affordances {
                 if let Some(dest_id) = &affordance.connects_to {
@@ -285,7 +285,7 @@ impl UI {
         };
 
         // Precompute incoming connection sources for performance
-        let mut incoming_sources: std::collections::HashMap<uuid::Uuid, Vec<String>> = std::collections::HashMap::new();
+        let mut incoming_sources: std::collections::HashMap<u32, Vec<String>> = std::collections::HashMap::new();
         for place in &app.breadboard.places {
             for affordance in &place.affordances {
                 if let Some(dest_id) = &affordance.connects_to {
@@ -390,8 +390,8 @@ impl UI {
                     Style::default()
                 };
 
-                // Check if this is the remove connection option (using UUID 0)
-                if *place_id == uuid::Uuid::from_u128(0) {
+                // Check if this is the remove connection option (using ID 0)
+                if *place_id == 0 {
                     items.push(ListItem::new(Line::from(Span::styled(
                         "Remove connection",
                         style.fg(if is_selected { Color::White } else { Color::Red }),

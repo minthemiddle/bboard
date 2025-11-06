@@ -1,11 +1,10 @@
 use crate::models::{Breadboard, Place, Affordance};
 use crate::input::Mode;
-use uuid::Uuid;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Selection {
-    Place(Uuid),
-    Affordance { place_id: Uuid, affordance_id: Uuid },
+    Place(u32),
+    Affordance { place_id: u32, affordance_id: u32 },
 }
 
 #[derive(Debug)]
@@ -14,15 +13,15 @@ pub struct AppState {
     pub selection: Option<Selection>,
     pub collapsed: bool,
     pub filter: Option<String>,
-    pub navigation_trail: Vec<Uuid>,
+    pub navigation_trail: Vec<u32>,
     pub edit_buffer: String,
     pub connection_search_buffer: String,
-    pub connection_search_results: Vec<Uuid>,
+    pub connection_search_results: Vec<u32>,
     pub selected_connection_result: Option<usize>,
     pub file_list: Vec<String>,
     pub selected_file_index: Option<usize>,
     pub place_search_buffer: String,
-    pub place_search_results: Vec<Uuid>,
+    pub place_search_results: Vec<u32>,
     pub selected_place_result: Option<usize>,
     pub is_searching_places: bool, // True when actively searching for places in Navigate mode
     pub pending_deletion: Option<Selection>, // Track what's pending deletion for confirmation
@@ -75,11 +74,12 @@ impl App {
 
     #[cfg(test)]
     pub fn new_place(&mut self, name: String) {
-        let place = Place::new(name);
+        let id = self.breadboard.generate_place_id();
+        let place = Place::new(id, name);
         self.breadboard.add_place(place);
     }
 
-    pub fn add_affordance_to_place(&mut self, place_id: &Uuid, affordance: Affordance) {
+    pub fn add_affordance_to_place(&mut self, place_id: &u32, affordance: Affordance) {
         if let Some(place) = self.breadboard.find_place_mut(place_id) {
             place.add_affordance(affordance);
         }
@@ -102,7 +102,7 @@ impl App {
         self.breadboard.find_place_mut(&id)
     }
 
-    pub fn navigate_to_place(&mut self, place_id: Uuid) {
+    pub fn navigate_to_place(&mut self, place_id: u32) {
         if let Some(current_place) = self.get_selected_place() {
             self.state.navigation_trail.push(current_place.id);
         }
@@ -120,7 +120,7 @@ impl App {
     }
 
     // Connection search methods
-    const REMOVE_CONNECTION_ID: Uuid = Uuid::from_u128(0); // Special ID for remove connection option
+    const REMOVE_CONNECTION_ID: u32 = 0; // Special ID for remove connection option
 
     pub fn update_connection_search(&mut self) {
         // Start with the remove connection option
@@ -327,7 +327,8 @@ mod tests {
         app.new_place("Test Place".to_string());
 
         let place_id = app.breadboard.places[0].id;
-        let affordance = crate::models::Affordance::new("Test Action".to_string());
+        let affordance_id = app.breadboard.generate_affordance_id();
+        let affordance = crate::models::Affordance::new(affordance_id, "Test Action".to_string());
         app.add_affordance_to_place(&place_id, affordance);
 
         assert_eq!(app.breadboard.places[0].affordances.len(), 1);
@@ -429,8 +430,8 @@ mod tests {
         app.new_place("Test Place".to_string());
 
         let place_id = app.breadboard.places[0].id;
-        let affordance = crate::models::Affordance::new("Test Action".to_string());
-        let affordance_id = affordance.id;
+        let affordance_id = app.breadboard.generate_affordance_id();
+        let affordance = crate::models::Affordance::new(affordance_id, "Test Action".to_string());
         app.add_affordance_to_place(&place_id, affordance);
 
         // Select the affordance

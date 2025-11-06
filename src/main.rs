@@ -44,7 +44,8 @@ fn main() -> Result<()> {
     if let Some(file) = filename {
         let file_str = file.clone();
         match file_manager.load_from_file(file) {
-            Ok(breadboard) => {
+            Ok(mut breadboard) => {
+                breadboard.sync_id_counters();
                 app.breadboard = breadboard;
                 app.state.current_filename = Some(file_str);
                 loaded_from_file = true;
@@ -66,8 +67,8 @@ fn main() -> Result<()> {
     // Start with blank board and prompt for first place name if no file was loaded
     if !loaded_from_file {
         let default_name = "Place 1".to_string();
-        let place = models::Place::new(default_name.clone());
-        let place_id = place.id;
+        let place_id = app.breadboard.generate_place_id();
+        let place = models::Place::new(place_id, default_name.clone());
 
         app.breadboard.add_place(place);
 
@@ -427,7 +428,8 @@ fn handle_select(app: &mut App, file_manager: &FileManager) {
             if let Some(filename) = app.get_selected_file() {
                 let filename_str = filename.clone();
                 match file_manager.load_from_file(filename) {
-                    Ok(breadboard) => {
+                    Ok(mut breadboard) => {
+                        breadboard.sync_id_counters();
                         app.breadboard = breadboard;
                         app.state.selection = None;
                         // Set current filename
@@ -489,8 +491,8 @@ fn handle_new_place(app: &mut App) {
     // Create a place with a default name
     let place_count = app.breadboard.places.len();
     let default_name = format!("Place {}", place_count + 1);
-    let place = models::Place::new(default_name.clone());
-    let place_id = place.id;
+    let place_id = app.breadboard.generate_place_id();
+    let place = models::Place::new(place_id, default_name.clone());
 
     app.breadboard.add_place(place);
 
@@ -513,8 +515,8 @@ fn handle_new_affordance(app: &mut App) {
         .unwrap_or(0);
 
     let default_name = format!("Action {}", affordance_count + 1);
-    let affordance = models::Affordance::new(default_name.clone());
-    let affordance_id = affordance.id;
+    let affordance_id = app.breadboard.generate_affordance_id();
+    let affordance = models::Affordance::new(affordance_id, default_name.clone());
 
     app.add_affordance_to_place(&place_id, affordance);
 

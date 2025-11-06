@@ -1,0 +1,29 @@
+name = "New Breadboard"
+created = "2025-11-06T22:17:02.963088+00:00"
+next_place_id = 3
+next_affordance_id = 5
+
+[[places]]
+id = 1
+name = "Place 1"
+
+[[places.affordances]]
+id = 1
+name = "Action 1"
+
+[[places]]
+id = 2
+name = "Place 2"
+
+[[places.affordances]]
+id = 2
+name = "Action 1"
+
+[[places.affordances]]
+id = 3
+name = "Action 2"
+
+[[places.affordances]]
+id = 4
+name = "Action 3"
+connects_to = 1

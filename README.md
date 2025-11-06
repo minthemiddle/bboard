@@ -28,7 +28,7 @@ Breadboarding is a method for sketching user interface flows using places, affor
 - `Type any character` - Quick search/jump to place (fuzzy filter by name)
 - `Enter` - Follow connections (on affordances) or jump to place (in search)
 - `e` - Enter edit mode to edit selected place/affordance
-- `d` or `Delete` - Delete selected place or affordance (shows confirmation for places)
+- `Ctrl+D` or `Delete` - Delete selected place or affordance (shows confirmation for places)
 - `Backspace/Esc` - Go back in navigation trail or cancel search
 - `Ctrl+Q` - Quit
 
@@ -38,7 +38,7 @@ Breadboarding is a method for sketching user interface flows using places, affor
 - `Backspace` - Delete characters
 - `Enter` - Save changes and exit edit mode
 - `Esc` - Cancel edit and exit edit mode
-- `d` or `Delete` - Delete selected place or affordance (from navigation mode)
+- `Ctrl+D` or `Delete` - Delete selected place or affordance (from navigation mode)
 
 **Navigation Pattern:**
 1. Use `Tab/Shift+Tab` to move between places (like "Invoice", "Setup Autopay")
@@ -161,7 +161,7 @@ The app starts with sample data demonstrating the Autopay flow from Basecamp's b
 5. **Edit Items**: Select any place/affordance and press `e` to edit its name
 6. **Create Connections**: Select an affordance and press `Ctrl+C`, then type to search for places
 7. **Remove Connections**: Select an affordance with a connection and press `Ctrl+R` to remove it
-8. **Delete Items**: Select any place/affordance and press `d` (or `Delete`) to remove it
+8. **Delete Items**: Select any place/affordance and press `Ctrl+D` (or `Delete`) to remove it
 9. **Navigate Back**: Press `Backspace` to return to the previous place
 10. **Filter**: Press `Ctrl+F` to see only places connected to your current selection
 11. **Try the 90s Example**: Press `Ctrl+O` and load `90s-personal-website.toml`

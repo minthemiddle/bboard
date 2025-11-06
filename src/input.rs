@@ -78,7 +78,9 @@ impl InputHandler {
                     Action::Edit('e'.to_string())
                 }
             },
-            KeyCode::Char('d') => Action::Delete, // Delete key (vim-style, works on all keyboards)
+            KeyCode::Char('d') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                Action::Delete // Ctrl+D to delete (works on all keyboards)
+            }
             KeyCode::Delete => Action::Delete, // Also support Delete key if available
             KeyCode::Backspace => {
                 if mode == Mode::Edit {

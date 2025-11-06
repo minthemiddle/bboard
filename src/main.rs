@@ -61,43 +61,23 @@ fn main() -> Result<()> {
         }
     }
 
-    // Add sample breadboard data if no file was loaded
+    // Start with blank board and prompt for first place name if no file was loaded
     if !loaded_from_file {
-        let invoice_place = models::Place::new("Invoice".to_string());
-        let invoice_id = invoice_place.id;
-        app.breadboard.add_place(invoice_place);
+        let default_name = "Place 1".to_string();
+        let place = models::Place::new(default_name.clone());
+        let place_id = place.id;
 
-        let setup_place = models::Place::new("Setup Autopay".to_string());
-        let setup_id = setup_place.id;
-        app.breadboard.add_place(setup_place);
+        app.breadboard.add_place(place);
 
-        let confirm_place = models::Place::new("Confirm".to_string());
-        let confirm_id = confirm_place.id;
-        app.breadboard.add_place(confirm_place);
-
-        // Add affordances with connections
-        let turn_on_autopay = models::Affordance::new("Turn on Autopay".to_string())
-            .with_connection(setup_id);
-        app.add_affordance_to_place(&invoice_id, turn_on_autopay);
-
-        let view_details = models::Affordance::new("View Details".to_string());
-        app.add_affordance_to_place(&invoice_id, view_details);
-
-        let cc_fields = models::Affordance::new("CC Fields".to_string())
-            .with_connection(confirm_id);
-        app.add_affordance_to_place(&setup_id, cc_fields);
-
-        let cancel = models::Affordance::new("Cancel".to_string())
-            .with_connection(invoice_id);
-        app.add_affordance_to_place(&setup_id, cancel);
-
-        let thank_you = models::Affordance::new("Thank You Message".to_string());
-        app.add_affordance_to_place(&confirm_id, thank_you);
-    }
-
-    // Set initial selection
-    if let Some(first_place) = app.breadboard.places.first() {
-        app.state.selection = Some(Selection::Place(first_place.id));
+        // Select the new place and enter edit mode
+        app.state.selection = Some(Selection::Place(place_id));
+        app.state.mode = Mode::Edit;
+        app.state.edit_buffer = default_name;
+    } else {
+        // Set initial selection for loaded files
+        if let Some(first_place) = app.breadboard.places.first() {
+            app.state.selection = Some(Selection::Place(first_place.id));
+        }
     }
 
     // Main event loop

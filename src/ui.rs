@@ -128,17 +128,19 @@ impl UI {
         let mut items = Vec::new();
 
         // Precompute all incoming connections once for performance
-        let mut incoming_counts = std::collections::HashMap::new();
+        let mut incoming_sources: std::collections::HashMap<uuid::Uuid, Vec<String>> = std::collections::HashMap::new();
         for place in &app.breadboard.places {
             for affordance in &place.affordances {
                 if let Some(dest_id) = &affordance.connects_to {
-                    *incoming_counts.entry(*dest_id).or_insert(0) += 1;
+                    incoming_sources.entry(*dest_id)
+                        .or_insert_with(Vec::new)
+                        .push(place.name.clone());
                 }
             }
         }
 
         for (place_index, place) in app.breadboard.places.iter().enumerate() {
-            let incoming_count = incoming_counts.get(&place.id).copied().unwrap_or(0);
+            let incoming_names = incoming_sources.get(&place.id);
 
             // Place header with incoming connections indicator
             let place_style = if app.state.selection == Some(Selection::Place(place.id)) {
@@ -147,10 +149,14 @@ impl UI {
                 Style::default().fg(Color::Cyan)
             };
 
-            let place_header = if incoming_count == 0 {
-                format!("┌─ {}", place.name)
+            let place_header = if let Some(names) = incoming_names {
+                if names.is_empty() {
+                    format!("┌─ {}", place.name)
+                } else {
+                    format!("┌─ {} (← {})", place.name, names.join(", "))
+                }
             } else {
-                format!("┌─ {} (← {} sources)", place.name, incoming_count)
+                format!("┌─ {}", place.name)
             };
 
             items.push(ListItem::new(Line::from(Span::styled(place_header, place_style))));
@@ -245,18 +251,20 @@ impl UI {
             app.breadboard.places.iter().collect()
         };
 
-        // Precompute incoming connection counts for performance
-        let mut incoming_counts = std::collections::HashMap::new();
+        // Precompute incoming connection sources for performance
+        let mut incoming_sources: std::collections::HashMap<uuid::Uuid, Vec<String>> = std::collections::HashMap::new();
         for place in &app.breadboard.places {
             for affordance in &place.affordances {
                 if let Some(dest_id) = &affordance.connects_to {
-                    *incoming_counts.entry(*dest_id).or_insert(0) += 1;
+                    incoming_sources.entry(*dest_id)
+                        .or_insert_with(Vec::new)
+                        .push(place.name.clone());
                 }
             }
         }
 
         for place in places_to_show {
-            let incoming_count = incoming_counts.get(&place.id).copied().unwrap_or(0);
+            let incoming_names = incoming_sources.get(&place.id);
             let outgoing_connections: Vec<_> = place.affordances.iter()
                 .filter_map(|a| a.connects_to.as_ref())
                 .filter_map(|dest_id| app.breadboard.find_place(dest_id))
@@ -270,8 +278,10 @@ impl UI {
 
             let mut place_info = format!("{} ({})", place.name, place.affordances.len());
 
-            if incoming_count > 0 {
-                place_info.push_str(&format!(" ← {}", incoming_count));
+            if let Some(names) = incoming_names {
+                if !names.is_empty() {
+                    place_info.push_str(&format!(" ← {}", names.join(", ")));
+                }
             }
 
             if !outgoing_connections.is_empty() {

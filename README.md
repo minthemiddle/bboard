@@ -119,15 +119,34 @@ This example demonstrates complex user flows with multiple navigation paths, per
 
 ```bash
 cargo build --release
+
+# Optional: Install to your path
+cargo install --path .
+```
+
+After installation, you can run `bboard` from anywhere:
+```bash
+# Start with sample data
+bboard
+
+# Open a specific file
+bboard my-breadboard.toml
 ```
 
 ## Usage
 
 ```bash
+# Start with sample data
 cargo run
+
+# Open a specific breadboard file
+cargo run -- breadboard.toml
+
+# Try the 90s website example
+cargo run -- 90s-personal-website.toml
 ```
 
-The app starts with sample data demonstrating the Autopay flow from Basecamp's breadboarding guide.
+The app starts with sample data demonstrating the Autopay flow from Basecamp's breadboarding guide, or loads a file if specified.
 
 ### First Steps:
 1. **Navigate Between Places**: Use `Tab/Shift+Tab` to move between places (Invoice, Setup Autopay, Confirm)
@@ -146,7 +165,8 @@ The app starts with sample data demonstrating the Autopay flow from Basecamp's b
 - **Places** are shown as headers: `┌─ Invoice`
 - **Affordances** are listed under places: `├─ Turn on Autopay → Setup`
 - **Connections** are shown with arrows: `→ Destination`
-- **Incoming connections** show: `(← 2 sources)` in collapsed view
+- **Incoming connections** show source place names: `(← Setup, Confirm)`
+- **Collapsed view** shows: `Invoice (2) ← Setup, Confirm → Payment`
 
 ## Testing
 

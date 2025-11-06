@@ -7,6 +7,7 @@ pub enum Mode {
     Edit,
     Connect,  // For creating connections with search
     OpenFile,  // For opening files
+    ConfirmDelete,  // For confirming place deletion
 }
 
 #[derive(Debug)]
@@ -59,6 +60,7 @@ impl InputHandler {
             Mode::Edit => self.handle_edit_key(key),
             Mode::Connect => self.handle_connect_key(key),
             Mode::OpenFile => self.handle_open_file_key(key),
+            Mode::ConfirmDelete => self.handle_confirm_delete_key(key),
         }
     }
 
@@ -177,6 +179,14 @@ impl InputHandler {
             KeyCode::Home => Action::Edit(String::from("home")),
             KeyCode::End => Action::Edit(String::from("end")),
 
+            _ => Action::None,
+        }
+    }
+
+    fn handle_confirm_delete_key(&self, key: KeyEvent) -> Action {
+        match key.code {
+            KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Enter => Action::Select, // Confirm deletion
+            KeyCode::Char('n') | KeyCode::Char('N') | KeyCode::Esc => Action::Back, // Cancel deletion
             _ => Action::None,
         }
     }

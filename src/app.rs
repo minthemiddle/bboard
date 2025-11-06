@@ -25,6 +25,7 @@ pub struct AppState {
     pub place_search_results: Vec<Uuid>,
     pub selected_place_result: Option<usize>,
     pub is_searching_places: bool, // True when actively searching for places in Navigate mode
+    pub pending_deletion: Option<Selection>, // Track what's pending deletion for confirmation
 }
 
 impl Default for AppState {
@@ -45,6 +46,7 @@ impl Default for AppState {
             place_search_results: Vec::new(),
             selected_place_result: None,
             is_searching_places: false,
+            pending_deletion: None,
         }
     }
 }

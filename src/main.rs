@@ -396,6 +396,20 @@ fn handle_select(app: &mut App, file_manager: &FileManager) {
             app.state.mode = Mode::Navigate;
             app.clear_connection_search();
         }
+        Mode::ConfirmDelete => {
+            // Confirm deletion - actually delete the place
+            if let Some(Selection::Place(place_id)) = &app.state.pending_deletion {
+                app.breadboard.places.retain(|p| &p.id != place_id);
+                app.state.selection = None;
+                // Select first place if any remain
+                if let Some(first_place) = app.breadboard.places.first() {
+                    app.state.selection = Some(Selection::Place(first_place.id));
+                }
+            }
+            // Exit confirmation mode
+            app.state.mode = Mode::Navigate;
+            app.state.pending_deletion = None;
+        }
         Mode::OpenFile => {
             // Open selected file
             if let Some(filename) = app.get_selected_file() {
@@ -434,6 +448,11 @@ fn handle_back(app: &mut App) {
         Mode::OpenFile => {
             app.state.mode = Mode::Navigate;
             app.clear_file_selection();
+        }
+        Mode::ConfirmDelete => {
+            // Cancel deletion
+            app.state.mode = Mode::Navigate;
+            app.state.pending_deletion = None;
         }
         Mode::Navigate => {
             if app.state.is_searching_places {
@@ -554,14 +573,13 @@ fn handle_enter_edit_mode(app: &mut App) {
 fn handle_delete(app: &mut App) {
     // Delete the currently selected place or affordance
     match &app.state.selection {
-        Some(Selection::Place(place_id)) => {
-            // Remove the place
-            app.breadboard.places.retain(|p| &p.id != place_id);
-            // Clear selection
-            app.state.selection = None;
+        Some(Selection::Place(_)) => {
+            // For places, show confirmation dialog first
+            app.state.pending_deletion = app.state.selection.clone();
+            app.state.mode = Mode::ConfirmDelete;
         }
         Some(Selection::Affordance { place_id, affordance_id }) => {
-            // Remove the affordance from its place
+            // Affordances can be deleted immediately without confirmation
             if let Some(place) = app.breadboard.find_place_mut(place_id) {
                 place.affordances.retain(|a| &a.id != affordance_id);
             }
@@ -613,6 +631,9 @@ fn handle_edit(app: &mut App, text_change: String) {
         }
         Mode::OpenFile => {
             // No text editing in file opening mode
+        }
+        Mode::ConfirmDelete => {
+            // No text editing in confirmation mode
         }
         Mode::Navigate => {
             if app.state.is_searching_places {

@@ -65,6 +65,38 @@ impl UI {
                         Span::raw(" (↑/↓ to select, Enter to open, Esc to cancel)"),
                     ]
                 }
+                Mode::ConfirmDelete => {
+                    // Get the place name if available
+                    let place_name = if let Some(Selection::Place(place_id)) = &app.state.pending_deletion {
+                        app.breadboard.find_place(place_id)
+                            .map(|p| p.name.as_str())
+                            .unwrap_or("Unknown")
+                    } else {
+                        "Unknown"
+                    };
+
+                    // Count affordances and connections
+                    let (affordance_count, connection_count) = if let Some(Selection::Place(place_id)) = &app.state.pending_deletion {
+                        if let Some(place) = app.breadboard.find_place(place_id) {
+                            let aff_count = place.affordances.len();
+                            let conn_count = place.affordances.iter()
+                                .filter(|a| a.connects_to.is_some())
+                                .count();
+                            (aff_count, conn_count)
+                        } else {
+                            (0, 0)
+                        }
+                    } else {
+                        (0, 0)
+                    };
+
+                    vec![
+                        Span::styled("Delete '", Style::default().fg(Color::Red)),
+                        Span::styled(place_name, Style::default().fg(Color::White)),
+                        Span::styled(format!("' with {} affordance(s) and {} connection(s)? ", affordance_count, connection_count), Style::default().fg(Color::Red)),
+                        Span::styled("(Y/Enter to confirm, N/Esc to cancel)", Style::default().fg(Color::Gray)),
+                    ]
+                }
                 _ => {
                     vec![
                         Span::styled(
@@ -306,6 +338,7 @@ impl UI {
             Mode::Edit => "EDIT",
             Mode::Connect => "CONNECT",
             Mode::OpenFile => "OPEN FILE",
+            Mode::ConfirmDelete => "CONFIRM DELETE",
         };
 
         let mode_style = match app.state.mode {
@@ -313,6 +346,7 @@ impl UI {
             Mode::Edit => Style::default().fg(Color::Yellow),
             Mode::Connect => Style::default().fg(Color::Cyan),
             Mode::OpenFile => Style::default().fg(Color::Magenta),
+            Mode::ConfirmDelete => Style::default().fg(Color::Red),
         };
 
         let text = vec![

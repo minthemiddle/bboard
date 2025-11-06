@@ -78,7 +78,8 @@ impl InputHandler {
                     Action::Edit('e'.to_string())
                 }
             },
-            KeyCode::Delete => Action::Delete,
+            KeyCode::Char('d') => Action::Delete, // Delete key (vim-style, works on all keyboards)
+            KeyCode::Delete => Action::Delete, // Also support Delete key if available
             KeyCode::Backspace => {
                 if mode == Mode::Edit {
                     Action::Edit(String::from("backspace"))

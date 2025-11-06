@@ -468,9 +468,18 @@ fn handle_back(app: &mut App) {
 }
 
 fn handle_new_place(app: &mut App) {
-    // For now, create a place with a default name
+    // Create a place with a default name
     let place_count = app.breadboard.places.len();
-    app.new_place(format!("Place {}", place_count + 1));
+    let default_name = format!("Place {}", place_count + 1);
+    let place = models::Place::new(default_name.clone());
+    let place_id = place.id;
+
+    app.breadboard.add_place(place);
+
+    // Select the new place and enter edit mode
+    app.state.selection = Some(Selection::Place(place_id));
+    app.state.mode = Mode::Edit;
+    app.state.edit_buffer = default_name;
 }
 
 fn handle_new_affordance(app: &mut App) {
@@ -485,8 +494,19 @@ fn handle_new_affordance(app: &mut App) {
         .map(|p| p.affordances.len())
         .unwrap_or(0);
 
-    let affordance = models::Affordance::new(format!("Action {}", affordance_count + 1));
+    let default_name = format!("Action {}", affordance_count + 1);
+    let affordance = models::Affordance::new(default_name.clone());
+    let affordance_id = affordance.id;
+
     app.add_affordance_to_place(&place_id, affordance);
+
+    // Select the new affordance and enter edit mode
+    app.state.selection = Some(Selection::Affordance {
+        place_id,
+        affordance_id,
+    });
+    app.state.mode = Mode::Edit;
+    app.state.edit_buffer = default_name;
 }
 
 

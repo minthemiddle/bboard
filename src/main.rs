@@ -22,6 +22,10 @@ use file::FileManager;
 use anyhow::Result;
 
 fn main() -> Result<()> {
+    // Parse command line arguments
+    let args: Vec<String> = std::env::args().collect();
+    let filename = args.get(1);
+
     // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -35,37 +39,61 @@ fn main() -> Result<()> {
     let input_handler = InputHandler::new();
     let file_manager = FileManager::new();
 
-    // Add sample breadboard data for testing
-    let invoice_place = models::Place::new("Invoice".to_string());
-    let invoice_id = invoice_place.id;
-    app.breadboard.add_place(invoice_place);
+    // Load file from command line or create sample data
+    let mut loaded_from_file = false;
+    if let Some(file) = filename {
+        match file_manager.load_from_file(file) {
+            Ok(breadboard) => {
+                app.breadboard = breadboard;
+                loaded_from_file = true;
+            }
+            Err(e) => {
+                // Restore terminal before showing error
+                disable_raw_mode()?;
+                execute!(
+                    terminal.backend_mut(),
+                    LeaveAlternateScreen,
+                    DisableMouseCapture
+                )?;
+                eprintln!("Error loading {}: {}", file, e);
+                std::process::exit(1);
+            }
+        }
+    }
 
-    let setup_place = models::Place::new("Setup Autopay".to_string());
-    let setup_id = setup_place.id;
-    app.breadboard.add_place(setup_place);
+    // Add sample breadboard data if no file was loaded
+    if !loaded_from_file {
+        let invoice_place = models::Place::new("Invoice".to_string());
+        let invoice_id = invoice_place.id;
+        app.breadboard.add_place(invoice_place);
 
-    let confirm_place = models::Place::new("Confirm".to_string());
-    let confirm_id = confirm_place.id;
-    app.breadboard.add_place(confirm_place);
+        let setup_place = models::Place::new("Setup Autopay".to_string());
+        let setup_id = setup_place.id;
+        app.breadboard.add_place(setup_place);
 
-    // Add affordances with connections
-    let turn_on_autopay = models::Affordance::new("Turn on Autopay".to_string())
-        .with_connection(setup_id);
-    app.add_affordance_to_place(&invoice_id, turn_on_autopay);
+        let confirm_place = models::Place::new("Confirm".to_string());
+        let confirm_id = confirm_place.id;
+        app.breadboard.add_place(confirm_place);
 
-    let view_details = models::Affordance::new("View Details".to_string());
-    app.add_affordance_to_place(&invoice_id, view_details);
+        // Add affordances with connections
+        let turn_on_autopay = models::Affordance::new("Turn on Autopay".to_string())
+            .with_connection(setup_id);
+        app.add_affordance_to_place(&invoice_id, turn_on_autopay);
 
-    let cc_fields = models::Affordance::new("CC Fields".to_string())
-        .with_connection(confirm_id);
-    app.add_affordance_to_place(&setup_id, cc_fields);
+        let view_details = models::Affordance::new("View Details".to_string());
+        app.add_affordance_to_place(&invoice_id, view_details);
 
-    let cancel = models::Affordance::new("Cancel".to_string())
-        .with_connection(invoice_id);
-    app.add_affordance_to_place(&setup_id, cancel);
+        let cc_fields = models::Affordance::new("CC Fields".to_string())
+            .with_connection(confirm_id);
+        app.add_affordance_to_place(&setup_id, cc_fields);
 
-    let thank_you = models::Affordance::new("Thank You Message".to_string());
-    app.add_affordance_to_place(&confirm_id, thank_you);
+        let cancel = models::Affordance::new("Cancel".to_string())
+            .with_connection(invoice_id);
+        app.add_affordance_to_place(&setup_id, cancel);
+
+        let thank_you = models::Affordance::new("Thank You Message".to_string());
+        app.add_affordance_to_place(&confirm_id, thank_you);
+    }
 
     // Set initial selection
     if let Some(first_place) = app.breadboard.places.first() {

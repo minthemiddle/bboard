@@ -26,6 +26,7 @@ pub struct AppState {
     pub selected_place_result: Option<usize>,
     pub is_searching_places: bool, // True when actively searching for places in Navigate mode
     pub pending_deletion: Option<Selection>, // Track what's pending deletion for confirmation
+    pub save_filename: String, // Filename for saving
 }
 
 impl Default for AppState {
@@ -47,6 +48,7 @@ impl Default for AppState {
             selected_place_result: None,
             is_searching_places: false,
             pending_deletion: None,
+            save_filename: String::from("breadboard.toml"),
         }
     }
 }

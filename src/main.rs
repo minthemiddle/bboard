@@ -410,6 +410,13 @@ fn handle_select(app: &mut App, file_manager: &FileManager) {
             app.state.mode = Mode::Navigate;
             app.state.pending_deletion = None;
         }
+        Mode::SaveFile => {
+            // Save with entered filename
+            let filename = app.state.save_filename.clone();
+            let _ = file_manager.save_to_file(&app.breadboard, &filename);
+            // Exit save file mode
+            app.state.mode = Mode::Navigate;
+        }
         Mode::OpenFile => {
             // Open selected file
             if let Some(filename) = app.get_selected_file() {
@@ -444,6 +451,10 @@ fn handle_back(app: &mut App) {
         Mode::Connect => {
             app.state.mode = Mode::Navigate;
             app.clear_connection_search();
+        }
+        Mode::SaveFile => {
+            // Cancel save
+            app.state.mode = Mode::Navigate;
         }
         Mode::OpenFile => {
             app.state.mode = Mode::Navigate;
@@ -531,18 +542,11 @@ fn handle_remove_connection(app: &mut App) {
     }
 }
 
-fn handle_save(app: &App, file_manager: &FileManager) -> Result<()> {
-    let filename = "breadboard.toml";
-    match file_manager.save_to_file(&app.breadboard, filename) {
-        Ok(()) => {
-            // In a real app, you'd show a success message
-            println!("Saved to {}", filename);
-        }
-        Err(e) => {
-            // In a real app, you'd show an error message in the UI
-            eprintln!("Failed to save: {}", e);
-        }
-    }
+fn handle_save(app: &mut App, _file_manager: &FileManager) -> Result<()> {
+    // Enter save file mode to prompt for filename
+    app.state.mode = Mode::SaveFile;
+    // Pre-fill with default filename
+    app.state.save_filename = String::from("breadboard.toml");
     Ok(())
 }
 
@@ -627,6 +631,22 @@ fn handle_edit(app: &mut App, text_change: String) {
                 // Add character to search buffer
                 app.state.connection_search_buffer.push_str(&text_change);
                 app.update_connection_search();
+            }
+        }
+        Mode::SaveFile => {
+            // Handle filename editing
+            if text_change == "backspace" {
+                app.state.save_filename.pop();
+            } else if text_change == "delete" {
+                // Delete character at cursor position (simplified)
+                if !app.state.save_filename.is_empty() {
+                    app.state.save_filename.pop();
+                }
+            } else if text_change == "left" || text_change == "right" || text_change == "home" || text_change == "end" {
+                // Cursor movement - simplified for now
+            } else if !text_change.is_empty() {
+                // Add character to buffer
+                app.state.save_filename.push_str(&text_change);
             }
         }
         Mode::OpenFile => {

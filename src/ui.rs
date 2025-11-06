@@ -59,6 +59,13 @@ impl UI {
                         Span::raw(" (↑/↓ to select, Enter to connect, Esc to cancel)"),
                     ]
                 }
+                Mode::SaveFile => {
+                    vec![
+                        Span::styled("Save as: ", Style::default().fg(Color::Green)),
+                        Span::styled(&app.state.save_filename, Style::default().fg(Color::White)),
+                        Span::raw(" (Enter to save, Esc to cancel)"),
+                    ]
+                }
                 Mode::OpenFile => {
                     vec![
                         Span::styled("Select file to open: ", Style::default().fg(Color::Magenta)),
@@ -337,6 +344,7 @@ impl UI {
             Mode::Navigate => "NAVIGATE",
             Mode::Edit => "EDIT",
             Mode::Connect => "CONNECT",
+            Mode::SaveFile => "SAVE FILE",
             Mode::OpenFile => "OPEN FILE",
             Mode::ConfirmDelete => "CONFIRM DELETE",
         };
@@ -345,6 +353,7 @@ impl UI {
             Mode::Navigate => Style::default().fg(Color::Green),
             Mode::Edit => Style::default().fg(Color::Yellow),
             Mode::Connect => Style::default().fg(Color::Cyan),
+            Mode::SaveFile => Style::default().fg(Color::Green),
             Mode::OpenFile => Style::default().fg(Color::Magenta),
             Mode::ConfirmDelete => Style::default().fg(Color::Red),
         };

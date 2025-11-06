@@ -7,6 +7,7 @@ pub enum Mode {
     Edit,
     Connect,  // For creating connections with search
     OpenFile,  // For opening files
+    SaveFile,  // For entering filename to save
     ConfirmDelete,  // For confirming place deletion
 }
 
@@ -60,6 +61,7 @@ impl InputHandler {
             Mode::Edit => self.handle_edit_key(key),
             Mode::Connect => self.handle_connect_key(key),
             Mode::OpenFile => self.handle_open_file_key(key),
+            Mode::SaveFile => self.handle_save_file_key(key),
             Mode::ConfirmDelete => self.handle_confirm_delete_key(key),
         }
     }
@@ -181,6 +183,23 @@ impl InputHandler {
             KeyCode::Right => Action::Edit(String::from("right")),
             KeyCode::Home => Action::Edit(String::from("home")),
             KeyCode::End => Action::Edit(String::from("end")),
+
+            _ => Action::None,
+        }
+    }
+
+    fn handle_save_file_key(&self, key: KeyEvent) -> Action {
+        match key.code {
+            KeyCode::Enter => Action::Select, // Save with entered filename
+            KeyCode::Esc => Action::Back, // Cancel save
+            KeyCode::Backspace => Action::Edit(String::from("backspace")),
+            KeyCode::Delete => Action::Edit(String::from("delete")),
+            KeyCode::Left => Action::Edit(String::from("left")),
+            KeyCode::Right => Action::Edit(String::from("right")),
+            KeyCode::Home => Action::Edit(String::from("home")),
+            KeyCode::End => Action::Edit(String::from("end")),
+
+            KeyCode::Char(c) => Action::Edit(c.to_string()),
 
             _ => Action::None,
         }

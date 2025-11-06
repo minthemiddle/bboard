@@ -1,37 +1,7 @@
 name = "New Breadboard"
-created = "2025-11-05T22:02:06.666848+00:00"
+created = "2025-11-06T21:55:31.821997+00:00"
 
 [[places]]
-id = "fc8d4ddf-c5ab-46e8-bd56-f728345b6086"
-name = "Invoice"
-
-[[places.affordances]]
-id = "fbe14bb8-83aa-402e-95cd-2c460e4187bc"
-name = "Turn on Autopay"
-connects_to = "1da0e547-b70e-44af-a921-9efd347d93e0"
-
-[[places.affordances]]
-id = "5905e121-addf-49ac-83a4-96dfe5601bb8"
-name = "View Details"
-
-[[places]]
-id = "4815593d-beff-417c-a908-afd8ed9827a0"
-name = "Setup Autopay"
-
-[[places.affordances]]
-id = "73b9192d-ad5c-4716-8926-d81216a4ea96"
-name = "CC Fields"
-connects_to = "1da0e547-b70e-44af-a921-9efd347d93e0"
-
-[[places.affordances]]
-id = "84eeef7b-8e99-4027-83d2-357155cc659c"
-name = "Cancel"
-connects_to = "fc8d4ddf-c5ab-46e8-bd56-f728345b6086"
-
-[[places]]
-id = "1da0e547-b70e-44af-a921-9efd347d93e0"
-name = "Confirm"
-
-[[places.affordances]]
-id = "9c2bd15c-1545-4490-b671-8ec420a28b65"
-name = "Thank You Message"
+id = "1eaa38de-0b30-4048-84de-da09d51e6897"
+name = "Place 1"
+affordances = []

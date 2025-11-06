@@ -185,12 +185,6 @@ impl UI {
                 items.push(ListItem::new(Line::from(Span::styled(affordance_text, affordance_style))));
             }
 
-            // Place footer
-            items.push(ListItem::new(Line::from(Span::styled(
-                "└─".to_string(),
-                Style::default().fg(Color::Cyan),
-            ))));
-
             // Add spacing between places
             if place_index < app.breadboard.places.len() - 1 {
                 items.push(ListItem::new(""));

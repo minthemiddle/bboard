@@ -231,9 +231,8 @@ impl App {
                 index += 1;
             }
 
-            // Count footer and spacing
-            index += 1; // footer
-            index += 1; // spacing
+            // Count spacing
+            index += 1; // spacing between places
         }
 
         None
